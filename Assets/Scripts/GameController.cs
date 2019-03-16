@@ -28,4 +28,9 @@ public class GameController : MonoBehaviour
     {
         
     }
+
+    void Initilize()
+    {
+        
+    }
 }

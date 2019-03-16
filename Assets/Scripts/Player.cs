@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
         rigid = gameObject.GetComponent<Rigidbody2D>();
         lastPos_Y_background = gameObject.transform.position.y;
         lastPos_Y_setPower = gameObject.transform.position.y;
+        float tempDis = Game.instance.offset_updateBackground;
     }
 
     // Update is called once per frame
@@ -69,14 +70,12 @@ public class Player : MonoBehaviour
             Vector2 tempForce = new Vector2(force, 0);
             rigid.AddForce(tempForce, ForceMode2D.Impulse);
         }
+    }
 
-        //更新背景检查
+    void FixedUpdate()
+    {
+        // //更新背景检查
         float nowY = gameObject.transform.position.y;
-        if(nowY - lastPos_Y_background >= Game.instance.offset_updateBackground)
-        {
-            eventUpdateBackground();
-            lastPos_Y_background = nowY;
-        }
         if(nowY - lastPos_Y_setPower >= Game.instance.offset_setPower)
         {
             eventSetPower();
