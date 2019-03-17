@@ -7,6 +7,16 @@ public class Power : MonoBehaviour
     float[] scale = {0.3f, 0.4f, 0.5f};  //三种大小对应三种能量
     int power;
     int score;
+    float dyingTime = 0.2f;
+    float beginTime = float.MaxValue;
+
+    enum MODE
+    {
+        None = 1,
+        Dying,
+        End
+    }
+    MODE nowMode = MODE.None;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,10 +39,33 @@ public class Power : MonoBehaviour
             power = Game.instance.power[2];
             score = Game.instance.baseScore[2] * (int)Game.instance.Level * Game.instance.multiScore;
         }
+        nowMode = MODE.None;
     }
 
     // Update is called once per frame
     void Update()
+    {
+        switch(nowMode)
+        {
+            case MODE.Dying:
+                Vector3 pos = Vector3.Lerp(gameObject.transform.position, Game.instance.player.transform.position, Time.deltaTime / dyingTime);
+                gameObject.transform.position = pos;
+                if(Time.time - beginTime >= dyingTime)
+                {
+                    nowMode = MODE.End;
+                    return;
+                }
+                break;
+
+            case MODE.End:
+                //todo, 生成吸收的光效，并且放到player子物体下，设置localPosition在player的位置
+                OnGetReward();
+                Destroy(gameObject);
+                break;
+        }
+    }
+
+    void FixedUpdate()
     {
         
     }
@@ -41,8 +74,8 @@ public class Power : MonoBehaviour
     {
 		if(other.gameObject.name == "GetTrigger")
         {
-            OnGetReward();
-            Destroy(gameObject);
+            beginTime = Time.time;
+            nowMode = MODE.Dying;
         }
 	}
 

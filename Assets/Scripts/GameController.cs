@@ -15,6 +15,9 @@ public class GameController : MonoBehaviour
         Game.instance.powerSetter = gameObject.GetComponent<PowerSetter>();
         GameObject canvas = GameObject.Find("Canvas").gameObject;
         Game.instance.screenRect = canvas.GetComponent<RectTransform>();
+
+        //预设
+        Game.instance.pre_power = (GameObject)Resources.Load("Prefabs/Power");
     }
 
     // Start is called before the first frame update

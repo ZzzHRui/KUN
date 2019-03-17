@@ -14,7 +14,6 @@ public class Player : MonoBehaviour
 
     //事件
     public delegate void Handler();
-    public event Handler eventUpdateBackground;  //需要更新背景的位置
     public event Handler eventSetPower;  //生成power
 
     // Start is called before the first frame update
@@ -33,6 +32,17 @@ public class Player : MonoBehaviour
         float y = this.speed_up * Time.deltaTime;
         Vector3 deltaPos =  new Vector3(0, y, 0);
         gameObject.transform.position += deltaPos;
+        // //更新背景检查
+        float nowY = gameObject.transform.position.y;
+        if(nowY - lastPos_Y_setPower >= Game.instance.offset_setPower)
+        {
+            eventSetPower();
+            lastPos_Y_setPower = nowY;
+        }
+    }
+
+    void FixedUpdate()
+    {
         //横向施力
         float force = 0.0f;
         if(Input.GetKey(KeyCode.LeftArrow))
@@ -69,17 +79,6 @@ public class Player : MonoBehaviour
         {
             Vector2 tempForce = new Vector2(force, 0);
             rigid.AddForce(tempForce, ForceMode2D.Impulse);
-        }
-    }
-
-    void FixedUpdate()
-    {
-        // //更新背景检查
-        float nowY = gameObject.transform.position.y;
-        if(nowY - lastPos_Y_setPower >= Game.instance.offset_setPower)
-        {
-            eventSetPower();
-            lastPos_Y_setPower = nowY;
         }
     }
 }

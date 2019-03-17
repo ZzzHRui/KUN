@@ -5,10 +5,10 @@ using UnityEngine;
 /*用于生成power */
 public class PowerSetter : MonoBehaviour
 {
-    public GameObject pre_power = null;   //能量预设体
-    public int setPointNum = 9;  //设置生成点的数量
-    public float minX = -3.0f;  //生成点平均分布在此范围内
-    public float maxX = 3.0f;
+    GameObject pre_power = null;   //能量预设体
+    int setPointNum =8;  //设置生成点的数量
+    float minX = -2.6f;  //生成点平均分布在此范围内
+    float maxX = 2.6f;
     float[] setPos_X;  //生成的位置
     float offset_setPosY = 10.0f;  //生成位置对于player的Y偏移量
 
@@ -36,11 +36,13 @@ public class PowerSetter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if(pre_power == null)
+            pre_power = Game.instance.pre_power;
         setPos_X = new float[setPointNum];
         float offset = (maxX - minX) / setPointNum;
         for(int i = 0; i < setPointNum; i++)
         {
-            setPos_X[i] = i * offset + minX;
+            setPos_X[i] = (i + 0.5f) * offset + minX;
         }
         Player player = Game.instance.player.GetComponent<Player>();
         if(player != null)
@@ -62,11 +64,15 @@ public class PowerSetter : MonoBehaviour
                     if(pre_power)
                     {
                         Vector3 pos = new Vector3(setPos_X[x], offset_setPosY + nowY, 0.0f);
+                        //todo, 如果生成道具，则此处改成道具的预设
                         GameObject.Instantiate(pre_power, pos, Quaternion.identity);
                     }
                 }
                 if(!setMap.MoveNext())
                 {
+                    //生成下一次的间距
+                    Game.instance.offset_setPower = (float)UnityEngine.Random.Range(offset_setPower_minQuantum, offset_setPower_maxQuantum) 
+                                            * offset_setPower_perQuantum + offset_setPower_min;
                     nowMode = MODE.None;
                     setMap.Dispose();
                 }
@@ -78,38 +84,71 @@ public class PowerSetter : MonoBehaviour
     void OnSetPower()
     {
         //生成模式
-        // nowMode = Random.Range(1, (int)MODE.End);
-        nowMode = MODE.Cube;
+        nowMode = (MODE)Random.Range(1, (int)MODE.End);
+        // nowMode = MODE.Diagonal;
         List<List<int>> setMap = new List<List<int>>();  //临时用的setMap
+        int w = 0;  //宽、高
+        int h = 0;
+        int beginX = 0;
+        int[] index;
         switch (nowMode)
         {
             case MODE.Cube:
-                int w = 2;  //宽、高
-                int h = Random.Range(2, 6);
-                int beginX = Random.Range(0, setPointNum - w + 1);
-                int[] index = new int[w];
+                //宽2，高2-5
+                w = 2;
+                h = Random.Range(2, 6);
+                beginX = Random.Range(0, setPointNum - w + 1);
+                index = new int[w];
                 for(int i = 0; i < w; i++)
-                {
                     index[i] = beginX + i;
-                }
                 for(int i = 0; i < h; i++)
+                    AddSetMap(setMap, index);
+                break;
+
+            case MODE.Row:
+                //一整排，高1-2
+                w = setPointNum;
+                h = Random.Range(1, 3);
+                beginX = 0;
+                index = new int[w];
+                for(int i = 0; i < w; i++)
+                    index[i] = beginX + i;
+                for(int i = 0; i < h; i++)
+                    AddSetMap(setMap, index);
+                break;
+
+            case MODE.List:
+                //1-3列,长度3-6
+                w = Random.Range(1, 4);
+                h = Random.Range(3, 7);
+                index = new int[w];
+                index[0] = Random.Range(0, setPointNum);
+                if(w > 1)
+                    index[1] = (index[0] + setPointNum / 2) % setPointNum;
+                if(w > 2)
+                    index[2] = (index[0] + setPointNum / 4) % setPointNum;
+                for(int i = 0; i < h; i++)
+                    AddSetMap(setMap, index);
+                break;
+
+            case MODE.Diagonal:
+                beginX = Random.Range(0, 2) * setPointNum / 2;  //要么从0要么从中间开始
+                index = new int[1];
+                int left2right = Random.Range(0, 2) * 2 - 1;  //左到右上升, ±1
+                if(beginX == 0)  //从0往右，或者从末尾往左
+                    if(left2right == -1)
+                        beginX = setPointNum - 1;
+                for(int i = 0; i < setPointNum; i++)
                 {
+                    index[0] = (beginX + left2right * i + setPointNum) % setPointNum;
                     AddSetMap(setMap, index);
                 }
-                break;
-            case MODE.Row:
-                break;
-            case MODE.List:
-                break;
-            case MODE.Diagonal:
                 break;
         }
         this.setMap = setMap.GetEnumerator();
         if(!this.setMap.MoveNext())
             this.setMap.Dispose();
-        //生成下一次的间距
-        Game.instance.offset_setPower = (float)UnityEngine.Random.Range(offset_setPower_minQuantum, offset_setPower_maxQuantum) 
-                                            * offset_setPower_perQuantum + offset_setPower_min;
+        Game.instance.offset_setPower = float.MaxValue;
         
     }
 

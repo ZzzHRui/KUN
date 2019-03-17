@@ -44,5 +44,8 @@ public class Game
         }
     }
     public int Score { get => score; set => score = value; }
+
+    //预设体
+    public GameObject pre_power = null;
 }
 

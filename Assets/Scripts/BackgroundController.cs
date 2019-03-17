@@ -20,7 +20,6 @@ public class BackgroundController : MonoBehaviour
         }
         player = Game.instance.player;
         Player p = player.GetComponent<Player>();
-        p.eventUpdateBackground += OnUpadateBackground;  //注册
     }
 
     // Update is called once per frame
