@@ -65,11 +65,6 @@ public class Power : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
-    {
-        
-    }
-
     void OnTriggerEnter2D(Collider2D other)
     {
 		if(other.gameObject.name == "GetTrigger")
@@ -82,6 +77,6 @@ public class Power : MonoBehaviour
     void OnGetReward()
     {
         Game.instance.Score += score;
-        Game.instance.PlayerPower += power;
+        Game.instance.playerScript.Power += power;
     }
 }

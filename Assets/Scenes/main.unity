@@ -493,7 +493,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.7946226
+  m_Radius: 0.8
 --- !u!1 &1200911368
 GameObject:
   m_ObjectHideFlags: 0
@@ -935,6 +935,8 @@ GameObject:
   - component: {fileID: 1840450114}
   - component: {fileID: 1840450113}
   - component: {fileID: 1840450115}
+  - component: {fileID: 1840450116}
+  - component: {fileID: 1840450117}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -980,11 +982,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3147045277ea2fb4c9096f1346ee6a5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pre_power: {fileID: 3084123174112871151, guid: 05fd6c65c1f8bad4192d3eaa72f80fff,
-    type: 3}
-  setPointNum: 9
-  minX: -3
-  maxX: 3
+--- !u!114 &1840450116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840450112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78f01a6cc28c87847a979cbdac268cde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1840450117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840450112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1aa5e56e884daa40837aa728994a627, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2122613383
 GameObject:
   m_ObjectHideFlags: 0
@@ -1195,4 +1216,4 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.7141219
+  m_Radius: 0.72

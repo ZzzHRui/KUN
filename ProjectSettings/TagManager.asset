@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Background
   - Power
+  - Monster
   layers:
   - Default
   - TransparentFX

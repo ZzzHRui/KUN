@@ -33,11 +33,16 @@ public class PowerSetter : MonoBehaviour
     }
     MODE nowMode = MODE.None;
 
+
+    void Awake()
+    {
+        //预设
+        pre_power = (GameObject)Resources.Load("Prefabs/Power");
+    }
+    
     // Start is called before the first frame update
     void Start()
     {
-        if(pre_power == null)
-            pre_power = Game.instance.pre_power;
         setPos_X = new float[setPointNum];
         float offset = (maxX - minX) / setPointNum;
         for(int i = 0; i < setPointNum; i++)
@@ -57,7 +62,7 @@ public class PowerSetter : MonoBehaviour
             float nowY = Game.instance.player.transform.position.y;
             if(nowY - offset_setPower_last >= offset_setPower_distance)
             {
-                //根据setMap的一行生成
+                //根据setMap的每行依次生成
                 List<int> internalList = setMap.Current;
                 foreach(int x in internalList)
                 {
