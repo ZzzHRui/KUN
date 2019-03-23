@@ -11,12 +11,6 @@ public class AvailableArea : MonoBehaviour
     {
         col = gameObject.GetComponent<Collider2D>();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     
     void OnTriggerExit2D(Collider2D other)
     {

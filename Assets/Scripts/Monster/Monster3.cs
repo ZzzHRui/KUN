@@ -15,26 +15,7 @@ public class Monster3 : MonsterBase
         base.Start();
         attack = Game.instance.attack[3];
         beginTime = Time.time;
-        switch(Game.instance.Level)
-        {
-            case LEVEL.Level1:
-                Destroy(gameObject);
-                // speed_down = -1.0f;
-                break;
-
-            case LEVEL.Level2:
-                Destroy(gameObject);
-                // speed_down = -1.0f;
-                break;
-
-            case LEVEL.Level3:
-                speed_down = -1.0f;
-                break;
-            
-            case LEVEL.Level4:
-                speed_down = -1.0f;
-                break;
-        }
+        speed_down = -1.0f;
     }
 
     // Update is called once per frame

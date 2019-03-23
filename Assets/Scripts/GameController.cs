@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    
+    public delegate void Handler();
+    public event Handler eventLevelUp;  //提高难度
     void Awake()
     {
         Game.instance = new Game();
@@ -35,5 +36,28 @@ public class GameController : MonoBehaviour
     void Initilize()
     {
         
+    }
+
+    void OnLevelUp()
+    {
+        switch(Game.instance.Level)
+        {
+            case LEVEL.Level1:
+                Game.instance.Level = LEVEL.Level2;
+                eventLevelUp();
+                Invoke("OnLevelUp", 90.0f);
+                break;
+
+            case LEVEL.Level2:
+                Game.instance.Level = LEVEL.Level3;
+                eventLevelUp();
+                Invoke("OnLevelUp", 120.0f);
+                break;
+
+            case LEVEL.Level3:
+                Game.instance.Level = LEVEL.Level4;
+                eventLevelUp();
+                break;
+        }
     }
 }

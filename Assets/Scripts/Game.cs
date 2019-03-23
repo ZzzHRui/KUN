@@ -30,7 +30,7 @@ public class Game
     //player
     public float speed_up_player = 8.0f;
     //难度
-    public LEVEL Level = LEVEL.Level1;
+    public LEVEL Level = LEVEL.Level3;
     //背景
     public float offset_updateBackground = 10.8f;  //更新背景的距离
 

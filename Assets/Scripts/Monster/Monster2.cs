@@ -10,24 +10,7 @@ public class Monster2 : MonsterBase
     {
         base.Start();
         attack = Game.instance.attack[2];
-        switch(Game.instance.Level)
-        {
-            case LEVEL.Level1:
-                speed_down = speed_down_min - 1.0f;
-                break;
-
-            case LEVEL.Level2:
-                speed_down = speed_down_min - 1.0f;
-                break;
-
-            case LEVEL.Level3:
-                speed_down = speed_down_min - 1.0f;
-                break;
-            
-            case LEVEL.Level4:
-                speed_down = speed_down_min - 1.0f;
-                break;
-        }
+        speed_down = speed_down_min - 1.0f;
     }
 
     // Update is called once per frame
