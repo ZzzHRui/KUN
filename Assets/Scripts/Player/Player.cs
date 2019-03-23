@@ -56,6 +56,8 @@ public class Player : MonoBehaviour
 
     void Initialize()
     {
+        SPEED_UP_NORMAL = Game.instance.speed_up_player;
+        SPEED_UP_MAX = 2 * SPEED_UP_NORMAL;
         lastPos_Y_setPower = gameObject.transform.position.y;
         lastPos_Y_setMonster = lastPos_Y_setPower;
         speed_up = SPEED_UP_NORMAL;
@@ -132,6 +134,8 @@ public class Player : MonoBehaviour
             return;
         Power -= attack;
         //判断死亡
+
+        print("beAttacked!");
     }
 
     //受到陷阱伤害，至少会保留1点能量

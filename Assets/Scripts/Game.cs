@@ -27,7 +27,10 @@ public class Game
     private int score = 0;  //分数
     public int Score { get => score; set => score = value; }
     // private int playerPower = 0;
-    public LEVEL Level = LEVEL.Level1;  //难度
+    //player
+    public float speed_up_player = 8.0f;
+    //难度
+    public LEVEL Level = LEVEL.Level1;
     //背景
     public float offset_updateBackground = 10.8f;  //更新背景的距离
 
@@ -41,6 +44,13 @@ public class Game
     public int multiScore = 7;
 
     //怪物
+    public int[] attack = {10, 10, 30, 10};  //每种怪物的攻击力，攻击力分别是0123的
+    public int[][] monsterLevel = {  //每组（每个难度）的每个元素为对应种类怪物出现的概率
+        new int[]{4, 4, 5, 5},  //总长度为最后一个元素的值，i种类占用的长度为 int[i] - int[i - 1]，本行种类0:2 = 4:1
+        new int[]{5, 8, 10, 10},
+        new int[]{5, 10, 13, 18},
+        new int[]{5, 10, 13, 18}
+    };
     public float offset_setMonster = 3.0f;
 
 }

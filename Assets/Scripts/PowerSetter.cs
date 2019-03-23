@@ -78,6 +78,8 @@ public class PowerSetter : MonoBehaviour
                     //生成下一次的间距
                     Game.instance.offset_setPower = (float)UnityEngine.Random.Range(offset_setPower_minQuantum, offset_setPower_maxQuantum) 
                                             * offset_setPower_perQuantum + offset_setPower_min;
+                    if(Game.instance.Level >= LEVEL.Level3)
+                        Game.instance.offset_setPower /= 2.0f;
                     nowMode = MODE.None;
                     setMap.Dispose();
                 }
