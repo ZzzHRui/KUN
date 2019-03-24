@@ -7,16 +7,24 @@ public class Power : MonoBehaviour
     float[] scale = {0.3f, 0.4f, 0.5f};  //三种大小对应三种能量
     int power;
     int score;
-    float dyingTime = 0.2f;
+    float dyingTime = 0.25f;
+    float redyTime = 0.1f;
     float beginTime = float.MaxValue;
 
     enum MODE
     {
         None = 1,
+        Begin,  //开始准备
         Dying,
+        Keep,
         End
     }
     MODE nowMode = MODE.None;
+
+    void Awake()
+    {
+        nowMode = MODE.None;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -39,7 +47,6 @@ public class Power : MonoBehaviour
             power = Game.instance.power[2];
             score = Game.instance.baseScore[2] * (int)Game.instance.Level * Game.instance.multiScore;
         }
-        nowMode = MODE.None;
     }
 
     // Update is called once per frame
@@ -47,11 +54,20 @@ public class Power : MonoBehaviour
     {
         switch(nowMode)
         {
+            case MODE.Begin:
+                if(Time.time - beginTime >= redyTime)
+                {
+                    SetToDying();
+                    return;
+                }
+                break;
+
             case MODE.Dying:
-                Vector3 pos = Vector3.Lerp(gameObject.transform.position, Game.instance.player.transform.position, Time.deltaTime / dyingTime);
-                gameObject.transform.position = pos;
+                Vector3 pos = Vector3.Lerp(gameObject.transform.localPosition, Vector3.zero, Time.deltaTime / dyingTime + 0.05f);
+                gameObject.transform.localPosition = pos;
                 if(Time.time - beginTime >= dyingTime)
                 {
+                    beginTime = Time.time;
                     nowMode = MODE.End;
                     return;
                 }
@@ -70,7 +86,8 @@ public class Power : MonoBehaviour
 		if(other.gameObject.name == "GetTrigger")
         {
             beginTime = Time.time;
-            nowMode = MODE.Dying;
+            nowMode = MODE.Begin;
+            gameObject.GetComponent<Collider2D>().enabled = false;
         }
 	}
 
@@ -78,5 +95,16 @@ public class Power : MonoBehaviour
     {
         Game.instance.Score += score;
         Game.instance.playerScript.Power += power;
+    }
+
+    public void SetToDying()
+    {
+        float playerY = Game.instance.player.gameObject.transform.position.y;
+        Vector3 thisPos = gameObject.transform.position;
+        if(playerY - thisPos.y >= 3.0f)  //提高视觉效果
+            gameObject.transform.position = new Vector3(thisPos.x, playerY - 3.0f, thisPos.z);
+        gameObject.transform.SetParent(Game.instance.player.gameObject.transform);
+        nowMode = MODE.Dying;
+        beginTime = Time.time;
     }
 }

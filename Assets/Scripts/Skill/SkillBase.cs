@@ -2,10 +2,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class SkillBase : MonoBehaviour
+public class SkillBase : MonoBehaviour
 {
     protected int id = -1;
+    protected float keepTime = 0.0f;
 
-    protected abstract void BeginSkill();
-    protected abstract void OverSkill();
+    protected void Start()
+    {
+        Invoke("DestoryGameObject", 6.0f);  //用于清除没被捡到的
+    }
+
+    protected void BeginSkill()
+    {
+        if(keepTime > 0.0f)
+        {
+            Game.instance.skillController.AddSkill(ref id, this);
+            Invoke("OverSkill", keepTime);
+        }
+        else  //属于直接使用的技能，直接结束即可
+        {
+            OverSkill();
+        }
+    }
+
+    protected void OverSkill()
+    {
+        if(id != -1 && keepTime > 0.0f)
+            Game.instance.skillController.RemoveSkill(id);
+    }
+
+    protected void OnTriggerEnter2D(Collider2D other)
+    {
+        gameObject.GetComponent<Collider2D>().enabled = false;
+        gameObject.transform.position = Vector3.zero;
+	}
+
+    public void DestoryGameObject()
+    {
+        Destroy(gameObject);
+    }
 }

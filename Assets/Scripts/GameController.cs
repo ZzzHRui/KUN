@@ -24,7 +24,7 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        // Invoke("OnLevelUp", 30.0f);
     }
 
     // Update is called once per frame

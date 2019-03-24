@@ -53,5 +53,8 @@ public class Game
     };
     public float offset_setMonster = 3.0f;
 
+    //道具
+    public float offset_setSkill = 120.0f;
+
 }
 

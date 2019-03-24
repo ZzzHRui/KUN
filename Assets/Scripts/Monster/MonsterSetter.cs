@@ -22,10 +22,10 @@ public class MonsterSetter : MonoBehaviour
     bool isSp = false;
     float sp_lastTime = float.MaxValue;
     float sp_offset = 1.0f;
-    float sp_delay = 3.0f;
-    int sp_delay_maxQuantum = 12;
-    int sp_delay_minQuantum = 6;
-    float sp_delay_perQuantum = 2f;  //每个单位的间隔距离
+    float sp_delay = 0.0f;
+    int sp_delay_maxQuantum = 10;
+    int sp_delay_minQuantum = 5;
+    float sp_delay_perQuantum = 5f;  //每个单位的间隔距离
     int sp_monsterIdx = -1;
     List<List<int>>.Enumerator setMap;  //每个元素记录list的位置
     SP_MODE nowMode = SP_MODE.None;

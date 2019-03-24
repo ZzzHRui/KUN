@@ -6,7 +6,7 @@ using UnityEngine;
 public class PowerSetter : MonoBehaviour
 {
     GameObject pre_power = null;   //能量预设体
-    int setPointNum =8;  //设置生成点的数量
+    int setPointNum = 8;  //设置生成点的数量
     float minX = -2.6f;  //生成点平均分布在此范围内
     float maxX = 2.6f;
     float[] setPos_X;  //生成的位置
@@ -168,5 +168,10 @@ public class PowerSetter : MonoBehaviour
             tempList.Add(i);
         }
         setMap.Add(tempList);
+    }
+
+    public GameObject GetPrePower()
+    {
+        return pre_power;
     }
 }

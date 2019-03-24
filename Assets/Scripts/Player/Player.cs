@@ -6,19 +6,28 @@ public class Player : MonoBehaviour
 {
     float SPEED_UP_NORMAL = 8.0f;
     float SPEED_UP_MAX = 16.0f;
+    float SPEED_SLOWDOWN_ADD;
     int POWER_MAX = 200;
     //属性
     float speed_up = 8.0f;
     float maxSpeed_hor = 10.0f;
     float lastPos_Y_setPower = 0.0f;
     float lastPos_Y_setMonster = 0.0f;
+    float lastPos_Y_setSkill = 0.0f;
     Rigidbody2D rigid;
     float force = 1.8f;
     int power = 0;
 
-    bool portected = false;  //无敌不会受伤
-    bool powerUp = false;  //满能量，不会随时间减少能量
     STATE state = STATE.None;
+    float protectTime = 0.2f;  //受伤之后的无敌时间
+    bool isProtecting = false;
+    float stateTime_last = 0.0f;
+    
+    //技能相关
+    bool portected = false;  //进入保护状态，免疫一次伤害
+    bool god = false;  //无敌
+    CircleCollider2D getTrigger = null;
+    float getTriggerRadius = 0.8f;
 
     enum STATE
     {
@@ -33,6 +42,8 @@ public class Player : MonoBehaviour
     public delegate void Handler();
     public event Handler eventSetPower;  //生成power
     public event Handler eventSetMonster;  //生成怪物
+    public event Handler eventSetSkill;  //生成道具
+    public event Handler eventDead;  //死亡
 
     public int Power { 
         get => power;
@@ -51,15 +62,19 @@ public class Player : MonoBehaviour
     void Start()
     {
         rigid = gameObject.GetComponent<Rigidbody2D>();
+        getTrigger = gameObject.transform.Find("GetTrigger").GetComponent<CircleCollider2D>();
+        getTrigger.radius = getTriggerRadius;
         Initialize();
     }
 
     void Initialize()
     {
         SPEED_UP_NORMAL = Game.instance.speed_up_player;
-        SPEED_UP_MAX = 2 * SPEED_UP_NORMAL;
+        SPEED_UP_MAX = 2.5f * SPEED_UP_NORMAL;
+        SPEED_SLOWDOWN_ADD = (-SPEED_UP_MAX + SPEED_UP_NORMAL) / 2.0f;
         lastPos_Y_setPower = gameObject.transform.position.y;
         lastPos_Y_setMonster = lastPos_Y_setPower;
+        lastPos_Y_setSkill = lastPos_Y_setPower;
         speed_up = SPEED_UP_NORMAL;
         Power = 50;
     }
@@ -83,6 +98,45 @@ public class Player : MonoBehaviour
         {
             eventSetMonster();
             lastPos_Y_setMonster = nowY;
+        }
+        //生成道具检查
+        if(nowY - lastPos_Y_setSkill >= Game.instance.offset_setSkill)
+        {
+            eventSetSkill();
+            lastPos_Y_setSkill = nowY;
+        }
+
+        switch(state)
+        {
+            case STATE.None:
+                break;
+
+            case STATE.SlowDown:
+                if(speed_up > SPEED_UP_NORMAL)
+                {
+                    speed_up += SPEED_SLOWDOWN_ADD * Time.deltaTime;
+                }
+                else
+                {
+                    speed_up = SPEED_UP_NORMAL;
+                    state = STATE.None;
+                    god = false;
+                }
+                break;
+                    
+            case STATE.Hurt:  //如果受伤致死则直接进入Dying状态
+                if(Time.time - stateTime_last > protectTime)
+                {
+                    state = STATE.None;
+                    isProtecting = false;
+                }
+                break;
+                    
+            case STATE.Dying:
+                break;
+            
+            case STATE.End:
+                break;
         }
     }
 
@@ -130,26 +184,62 @@ public class Player : MonoBehaviour
     //被敌对势力攻击
     public void BeAttacked(int attack)
     {
-        if(portected)
+        if(god || isProtecting)
             return;
+        if(portected)
+        {
+            portected = false;
+            return;
+        }
         Power -= attack;
+        state = STATE.Hurt;
+        stateTime_last = Time.time;
         //判断死亡
 
+        isProtecting = true;
         print("beAttacked!");
     }
 
     //受到陷阱伤害，至少会保留1点能量
     public void BeHurted(int hurted)
     {
-        if(portected)
-            return;
         Power -= hurted;
         //判断是否低于1
+        if(Power < 1)
+            Power = 1;
     }
 
-    //能量满了
-    void OnPowerUp()
+    public void SpeedMax()
     {
+        speed_up = SPEED_UP_MAX;
+    }
 
+    public void GodIn()
+    {
+        god = true;
+    }
+
+    public void IntoState_None()
+    {
+        if(speed_up > SPEED_UP_NORMAL)
+            state = STATE.SlowDown;
+        else
+            state = STATE.None;
+    }
+
+    public void SetProtected(bool value=true)
+    {
+        portected = value;
+    }
+
+    public bool GetProtected()
+    {
+        return portected;
+    }
+
+    public void SetTriggerSize(float rate)
+    {
+        if(getTrigger != null)
+            getTrigger.radius = rate * getTriggerRadius;
     }
 }
