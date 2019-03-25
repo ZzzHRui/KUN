@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     Rigidbody2D rigid;
     float force = 1.8f;
     int power = 0;
+    int action = 0;
 
     STATE state = STATE.None;
     float protectTime = 0.2f;  //受伤之后的无敌时间
@@ -47,14 +48,18 @@ public class Player : MonoBehaviour
     public event Handler eventDead;  //死亡
     public event Handler eventSpeedMax;  //进入加速状态
     public event Handler eventSpeedSlow;  //进入减速状态
+    public event Handler eventPowerMax;  //能量满了
 
     public int Power { 
         get => power;
         set{
             if(value < 0)
                 power = 0; 
-            else if(value > POWER_MAX)
+            else if(value >= POWER_MAX)
+            {
                 power = POWER_MAX;
+                eventPowerMax();
+            }
             else
                 power = value;
         }
@@ -84,6 +89,11 @@ public class Player : MonoBehaviour
         speed_up = SPEED_UP_NORMAL;
         Power = 50;
         state = STATE.None;
+        portected = false;
+        action = 0;
+        isProtecting = false;
+        stateTime_last = Time.time;
+        god = false;
     }
 
     // Update is called once per frame
@@ -167,24 +177,35 @@ public class Player : MonoBehaviour
             if(rigid.velocity.x < this.maxSpeed_hor)
                 force = this.force * 1.0f;
         }
-        //触屏测试
-        if(Input.touchCount == 1)  //有触摸
+        // //触屏测试
+        // if(Input.touchCount == 1)  //有触摸
+        // {
+        //     //测试，只检测x值
+        //     if(Input.GetTouch(0).phase == TouchPhase.Stationary)
+        //     {
+        //         Vector2 pos = Input.GetTouch(0).position;
+        //         if(pos.x < Game.instance.screenRect.rect.width / 2)  //左边
+        //         {
+        //             if(rigid.velocity.x > -this.maxSpeed_hor)
+        //                 force = this.force * -1.0f;
+        //         }
+        //         else  //右边
+        //         {
+        //             if(rigid.velocity.x < this.maxSpeed_hor)
+        //                 force = this.force * 1.0f;
+        //         }
+        //     }
+        // }
+
+        if(action == -1)  //左边
         {
-            //测试，只检测x值
-            if(Input.GetTouch(0).phase == TouchPhase.Stationary)
-            {
-                Vector2 pos = Input.GetTouch(0).position;
-                if(pos.x < Game.instance.screenRect.rect.width / 2)  //左边
-                {
-                    if(rigid.velocity.x > -this.maxSpeed_hor)
-                        force = this.force * -1.0f;
-                }
-                else  //右边
-                {
-                    if(rigid.velocity.x < this.maxSpeed_hor)
-                        force = this.force * 1.0f;
-                }
-            }
+            if(rigid.velocity.x > -this.maxSpeed_hor)
+            force = this.force * -1.0f;
+        }
+        else if(action == 1)  //右边
+        {
+            if(rigid.velocity.x < this.maxSpeed_hor)
+                force = this.force * 1.0f;
         }
 
         if (force != 0.0f)
@@ -212,12 +233,11 @@ public class Player : MonoBehaviour
         {
             state = STATE.Dying;
             stateTime_last = Time.time;
-            gameObject.GetComponent<Collider2D>().enabled = false;
             getTrigger.enabled = false;
             eventDead();
-            return;
         }
-        isProtecting = true;
+        isProtecting = true;  //死亡后一直保持保护状态不会再度受伤
+        //通知刷新power的UI，分数实时刷新即可
     }
 
     //受到陷阱伤害，至少会保留1点能量
@@ -265,5 +285,13 @@ public class Player : MonoBehaviour
     {
         if(getTrigger != null)
             getTrigger.radius = rate * getTriggerRadius;
+    }
+
+    public void SetActionState(int right)
+    {
+        /*设置运动方向*/
+        if(right < -1 || right > 1)
+            return;
+        action = right;
     }
 }

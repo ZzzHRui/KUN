@@ -5,7 +5,7 @@ using UnityEngine;
 /*无敌加速状态 */
 public class Skill_Super : SkillBase
 {
-    new void Start()
+    new public void Start()
     {
         base.Start();
         keepTime = 10.0f;
@@ -42,4 +42,11 @@ public class Skill_Super : SkillBase
             base.OnTriggerEnter2D(other);
         }
 	}
+
+    public void ForceBegin()
+    {
+        /*强制启动此技能 */
+        Start();
+        BeginSkill();
+    }
 }

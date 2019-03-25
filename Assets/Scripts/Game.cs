@@ -57,7 +57,24 @@ public class Game
     //道具
     public float offset_setSkill;
     public float time_speed_slowdown = 2.0f;
-    public float speed_max_rate = 2.5f;  //加速时相对于正常速度的比率
+    public float speed_max_rate = 2.0f;  //加速时相对于正常速度的比率
 
+    //按钮
+    //位置
+    public Vector2[] leftBtnPos = {
+        new Vector2(150f, -850f),   //右边
+        new Vector2(-400f, -850f),  //左边
+        new Vector2(-350f, -850f)   //分两侧
+    };
+    public Vector2[] rightBtnPos = {
+        new Vector2(400f, -850f),  //右边
+        new Vector2(-150f, -850f),  //左边
+        new Vector2(350f, -850f)   //分两侧
+    };
+    public Vector2[] powerUpBtnPos = {
+        new Vector2(-180f, -850f),  //右边
+        new Vector2(180f, -850f),  //左边
+        new Vector2(0f, -850f)   //分两侧
+    };
 }
 
