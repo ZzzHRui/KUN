@@ -32,7 +32,6 @@ public class SkillController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        skillDict = new Dictionary<int, SkillBase>();
         Game.instance.playerScript.eventSetSkill += SetSkill;
         setPos_X = new float[setPointNum];
         float offset = (maxX - minX) / setPointNum;
@@ -40,6 +39,14 @@ public class SkillController : MonoBehaviour
         {
             setPos_X[i] = (i + 0.5f) * offset + minX;
         }
+
+        Initialize();
+
+    }
+
+    public void Initialize()
+    {
+        skillDict = new Dictionary<int, SkillBase>();
     }
 
     // Update is called once per frame

@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
 
     STATE state = STATE.None;
     float protectTime = 0.2f;  //受伤之后的无敌时间
+    float dyingTime = 2.0f;  //死亡中的时间
     bool isProtecting = false;
     float stateTime_last = 0.0f;
     
@@ -65,12 +66,15 @@ public class Player : MonoBehaviour
     {
         rigid = gameObject.GetComponent<Rigidbody2D>();
         getTrigger = gameObject.transform.Find("GetTrigger").GetComponent<CircleCollider2D>();
-        getTrigger.radius = getTriggerRadius;
         Initialize();
     }
 
-    void Initialize()
+    public void Initialize()
     {
+        gameObject.transform.position = new Vector3(0.0f, 3.4f, 0.0f);
+        gameObject.GetComponent<Collider2D>().enabled = true;
+        getTrigger.enabled = true;
+        getTrigger.radius = getTriggerRadius;
         SPEED_UP_NORMAL = Game.instance.speed_up_player;
         SPEED_UP_MAX = SPEED_UP_NORMAL * Game.instance.speed_max_rate;
         SPEED_SLOWDOWN_ADD = (-SPEED_UP_MAX + SPEED_UP_NORMAL) / Game.instance.time_speed_slowdown;
@@ -79,6 +83,7 @@ public class Player : MonoBehaviour
         lastPos_Y_setSkill = lastPos_Y_setPower;
         speed_up = SPEED_UP_NORMAL;
         Power = 50;
+        state = STATE.None;
     }
 
     // Update is called once per frame
@@ -126,7 +131,7 @@ public class Player : MonoBehaviour
                 }
                 break;
                     
-            case STATE.Hurt:  //如果受伤致死则直接进入Dying状态
+            case STATE.Hurt:  //如果受伤致死则直接进入Dying状态，不需要在此判断是否死亡
                 if(Time.time - stateTime_last > protectTime)
                 {
                     state = STATE.None;
@@ -135,9 +140,15 @@ public class Player : MonoBehaviour
                 break;
                     
             case STATE.Dying:
+                if(Time.time - stateTime_last > dyingTime)
+                {
+                    state = STATE.End;
+                }
                 break;
             
             case STATE.End:
+                gameObject.SetActive(false);
+                PanelMgr.instance.OpenPanel<OverPanel>("");
                 break;
         }
     }
@@ -197,7 +208,15 @@ public class Player : MonoBehaviour
         state = STATE.Hurt;
         stateTime_last = Time.time;
         //判断死亡
-
+        if(Power < 1)
+        {
+            state = STATE.Dying;
+            stateTime_last = Time.time;
+            gameObject.GetComponent<Collider2D>().enabled = false;
+            getTrigger.enabled = false;
+            eventDead();
+            return;
+        }
         isProtecting = true;
     }
 

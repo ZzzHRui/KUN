@@ -22,13 +22,6 @@ public class BackgroundController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameObject.transform.position = new Vector3(0, 0, z);
-        //初始化背景的位置
-        for(int i = 0; i < Game.instance.backgrounds.Length; i++)
-        {
-            Game.instance.backgrounds[i].transform.localPosition = new Vector3(0, Game.instance.offset_updateBackground * i, 0);
-        }
-
         player = Game.instance.player;
         Player p = player.GetComponent<Player>();
         p.eventSpeedMax += OnSpeedMax;
@@ -37,7 +30,21 @@ public class BackgroundController : MonoBehaviour
         SPEED_NORMAL = Game.instance.speed_down_background;
         SPEED_MAX = SPEED_NORMAL * Game.instance.speed_max_rate;
         SPEED_SLOWDOWN_ADD = -(SPEED_MAX - SPEED_NORMAL) / Game.instance.time_speed_slowdown;
+
+        Initialize();
+    }
+
+    public void Initialize()
+    {
+        gameObject.transform.position = new Vector3(0, 0, z);
+        //初始化背景的位置
+        for(int i = 0; i < Game.instance.backgrounds.Length; i++)
+        {
+            Game.instance.backgrounds[i].transform.localPosition = new Vector3(0, Game.instance.offset_updateBackground * i, 0);
+        }
         speed = SPEED_NORMAL;
+        nextIdx = 0;
+        nowState = STATE.Normal;
     }
 
     // Update is called once per frame

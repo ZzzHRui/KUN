@@ -15,6 +15,7 @@ public class Game
     public static Game instance;  //单例
 
     public GameController gameController = null;
+    public BackgroundController backgroundController = null;
     public PowerSetter powerSetter = null;
     public SkillController skillController = null;
     public MonsterSetter monsterSetter = null;
@@ -24,22 +25,21 @@ public class Game
     public GameObject[] backgrounds = null;
     public RectTransform screenRect;
 
-    private int score = 0;  //分数
+    private int score;  //分数
     public int Score { get => score; set => score = value; }
-    // private int playerPower = 0;
     //player
-    public float speed_up_player = 8.0f;
+    public float speed_up_player;
     //难度
     public LEVEL Level = LEVEL.Level1;
     //背景
     public float offset_updateBackground = 10.8f;  //更新背景的距离
-    public float speed_down_background = 6.0f;
+    public float speed_down_background;
 
     //摄像机
     public float offset_camera = 3.4f;  //摄像机和player的偏移距离
 
     //能量
-    public float offset_setPower = 1.0f;  //生成power的player的移动距离
+    public float offset_setPower;  //生成power的player的移动距离
     public int[] power = {1, 2, 4};  //能量值
     public int[] baseScore = {1, 2, 3};  //能量的基础分值，分值为 baseScore * multiScore * level
     public int multiScore = 7;
@@ -52,10 +52,10 @@ public class Game
         new int[]{5, 10, 13, 18},
         new int[]{5, 10, 13, 18}
     };
-    public float offset_setMonster = 3.0f;
+    public float offset_setMonster;
 
     //道具
-    public float offset_setSkill = 120.0f;
+    public float offset_setSkill;
     public float time_speed_slowdown = 2.0f;
     public float speed_max_rate = 2.5f;  //加速时相对于正常速度的比率
 

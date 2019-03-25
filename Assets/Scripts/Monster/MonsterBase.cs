@@ -13,6 +13,7 @@ public class MonsterBase : MonoBehaviour
     protected void Start()
     {
         gameObject.transform.Rotate(0.0f, 0.0f, 180.0f);
+        Invoke("DestroyGameObject", 10.0f);  //防止有怪物意外不清除
     }
 
     protected void Update()
@@ -27,5 +28,10 @@ public class MonsterBase : MonoBehaviour
         Game.instance.playerScript.BeAttacked(attack);
         var collider = gameObject.GetComponent<Collider2D>();
         hasCollide = true;
+    }
+
+    protected void DestroyGameObject()
+    {
+        Destroy(gameObject);
     }
 }

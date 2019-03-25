@@ -13,15 +13,9 @@ public class MonsterSetter : MonoBehaviour
     float offset_setPosY = 10.0f;  //生成位置对于player的Y偏移量
     int[] monsterLevel;  //当前难度对应的可能出现的怪物表
 
-    // float offset_setMonster_min = 5.0f;
-    // int offset_setMonster_minQuantum = 0;  //用于随机生成下一次的offset_setPower，int类型减少开销
-    // int offset_setMonster_maxQuantum = 6;
-    // float offset_setMonster_perQuantum = 1.0f;  //每个单位的间隔距离
-
     //特殊怪物群相关
     bool isSp = false;
     float sp_lastTime = float.MaxValue;
-    float sp_offset = 1.0f;
     float sp_delay = 0.0f;
     int sp_delay_maxQuantum = 10;
     int sp_delay_minQuantum = 5;
@@ -52,18 +46,31 @@ public class MonsterSetter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Game.instance.gameController.eventLevelUp += OnLevelUp;
-        OnLevelUp();
         setPos_X = new float[setPointNum];
         float offset = (maxX - minX) / setPointNum;
         for(int i = 0; i < setPointNum; i++)
         {
             setPos_X[i] = (i + 0.5f) * offset + minX;
         }
+        //注册
         Player player = Game.instance.player.GetComponent<Player>();
         if(player != null)
             player.eventSetMonster += OnSetMonster;
+        Game.instance.gameController.eventLevelUp += OnLevelUp;
+        Game.instance.playerScript.eventDead += OnPlayerDead;
+
+        Initialize();
+    }
+
+    public void Initialize()
+    {
+        OnLevelUp();
         sp_lastTime = Time.time;
+        isSp = false;
+        sp_lastTime = float.MaxValue;
+        sp_monsterIdx = -1;
+        nowMode = SP_MODE.None;
+        setMap.Dispose();
     }
 
     // Update is called once per frame
@@ -225,6 +232,11 @@ public class MonsterSetter : MonoBehaviour
     void OnLevelUp()
     {
         SetOffset_SetMonster();
+    }
+
+    void OnPlayerDead()
+    {
+        return;
     }
 
     void SetOffset_SetMonster()

@@ -7,6 +7,7 @@ public class PowerSetter : MonoBehaviour
 {
     float OFFSET_DISTANCE_NORMAL = 0.5f;
     float OFFSET_DISTANCE_SP = 1.0f;
+    bool active = true; 
 
     GameObject pre_power = null;   //能量预设体
     int setPointNum = 8;  //设置生成点的数量
@@ -61,13 +62,27 @@ public class PowerSetter : MonoBehaviour
         Player player = Game.instance.player.GetComponent<Player>();
         if(player != null)
             player.eventSetPower += OnSetPower;
+        player.eventDead += OnPlayerDead;
+        
+        Initialize();
+    }
+
+    public void Initialize()
+    {
+        active = true;
         sp_time_last = Time.time;
+        offset_setPower_distance = OFFSET_DISTANCE_NORMAL;
         offset_setPower_last = Time.time;
+        sp_time_last = 0.0f;
+        sp_time_delay = 30.0f;
+        setMap.Dispose();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(!active)
+            return;
         if(nowMode != MODE.None)
         {
             float nowY = Game.instance.player.transform.position.y;
@@ -191,6 +206,11 @@ public class PowerSetter : MonoBehaviour
             this.setMap.Dispose();
         Game.instance.offset_setPower = float.MaxValue;
         
+    }
+
+    void OnPlayerDead()
+    {
+        active = false;
     }
 
     //给setMap增加一行，并设置生成的x

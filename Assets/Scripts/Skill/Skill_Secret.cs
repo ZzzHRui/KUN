@@ -9,7 +9,7 @@ public class Skill_Secret : SkillBase
     int setPowerNum_min = 5;
     int setPowerNum_max = 10;
     int setPowerNum_per = 5;
-    int redussScore = 25;
+    int redussPower = 25;
     int goodRate = 6;
 
     GameObject pre_power = null;
@@ -32,17 +32,17 @@ public class Skill_Secret : SkillBase
     {
         //生成大量的能量
         int roll = Random.Range(0, 11);
-        InvokeRepeating("SetPower", 0.02f, 0.02f);  //test
-        // if(roll <= goodRate)
-        // {
-        //     InvokeRepeating("SetPower", 0.02f, 0.02f);  //0.1秒后才出现能量
-        //     //特效
-        // }
-        // else
-        // {
-        //     Game.instance.Score -= redussScore;
-        //     //特效
-        // }
+        // InvokeRepeating("SetPower", 0.02f, 0.02f);  //test
+        if(roll <= goodRate)
+        {
+            InvokeRepeating("SetPower", 0.02f, 0.02f);  //0.1秒后才出现能量
+            //特效
+        }
+        else
+        {
+            Game.instance.playerScript.BeHurted(redussPower);
+            //特效
+        }
     }
 
     new void OnTriggerEnter2D(Collider2D other)
