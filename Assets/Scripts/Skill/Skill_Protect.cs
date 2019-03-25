@@ -8,6 +8,7 @@ public class Skill_Protect : SkillBase
     new void Start()
     {
         base.Start();
+        id = 2;
     }
 
     // Update is called once per frame
@@ -18,10 +19,11 @@ public class Skill_Protect : SkillBase
 
     new void BeginSkill()
     {
-        base.BeginSkill();
         Player player = Game.instance.playerScript;
         player.SetProtected();
         //特效相关设置
+
+        base.BeginSkill();
     }
 
     new void OverSkill()

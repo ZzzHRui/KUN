@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SkillController : MonoBehaviour
 {
-    int nowID = 0;
+    // int nowID = 0;
     Dictionary<int, SkillBase> skillDict;  //存放当前生效的技能
     GameObject[] pre_skills;
     int setPointNum = 6;  //设置生成点的数量
@@ -13,11 +13,11 @@ public class SkillController : MonoBehaviour
     float[] setPos_X;  //生成的位置
     float offset_setPosY = 10.0f;  //生成位置对于player的Y偏移量
 
-    int offset_set_min = 15;
-    int offset_set_max = 30;
+    int offset_set_min = 10;
+    int offset_set_max = 20;
     float offset_set_per = 8.0f;
 
-    public int NowID { get => nowID++;}  //id用完一次自增
+    // public int NowID { get => nowID++;}  //id用完一次自增
     
     void Awake()
     {
@@ -60,17 +60,23 @@ public class SkillController : MonoBehaviour
         Game.instance.offset_setSkill = (float)Random.Range(offset_set_min, offset_set_max + 1) * offset_set_per;
     }
 
-    public void AddSkill(ref int id,SkillBase skill)
+    public void AddSkill(SkillBase skill)
     {
-        int tempId = NowID;
-        skillDict.Add(tempId, skill);
-        //将id记录到skill对象中
-        id = tempId;
+        int tempId = skill.GetID();
+        if(skillDict.ContainsKey(tempId))  //已经存在相同效果的技能，删除上一个，加入新的
+        {
+            skillDict[tempId].DestoryGameObject();
+            skillDict[tempId] = skill;
+        }
+        else
+        {
+            skillDict.Add(tempId, skill);
+        }
     }
 
     public void RemoveSkill(int id)
     {
-        skillDict[id].DestoryGameObject();
+        // skillDict[id].DestoryGameObject();
         skillDict.Remove(id);
     }
 }

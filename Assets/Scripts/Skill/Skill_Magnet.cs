@@ -8,13 +8,15 @@ public class Skill_Magnet : SkillBase
     {
         base.Start();
         keepTime = 10.0f;
+        id = 4;
     }
 
     new void BeginSkill()
     {
-        base.BeginSkill();
         Game.instance.playerScript.SetTriggerSize(3.0f);  //放大为三倍
         //特效相关设置
+
+        base.BeginSkill();
     }
 
     new void OverSkill()

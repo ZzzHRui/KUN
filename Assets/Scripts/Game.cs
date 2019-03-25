@@ -30,9 +30,10 @@ public class Game
     //player
     public float speed_up_player = 8.0f;
     //难度
-    public LEVEL Level = LEVEL.Level3;
+    public LEVEL Level = LEVEL.Level1;
     //背景
     public float offset_updateBackground = 10.8f;  //更新背景的距离
+    public float speed_down_background = 6.0f;
 
     //摄像机
     public float offset_camera = 3.4f;  //摄像机和player的偏移距离
@@ -44,7 +45,7 @@ public class Game
     public int multiScore = 7;
 
     //怪物
-    public int[] attack = {10, 10, 30, 10};  //每种怪物的攻击力，攻击力分别是0123的
+    public int[] attack = {30, 30, 80, 30};  //每种怪物的攻击力，攻击力分别是0123的
     public int[][] monsterLevel = {  //每组（每个难度）的每个元素为对应种类怪物出现的概率
         new int[]{4, 4, 5, 5},  //总长度为最后一个元素的值，i种类占用的长度为 int[i] - int[i - 1]，本行种类0:2 = 4:1
         new int[]{5, 8, 10, 10},
@@ -55,6 +56,8 @@ public class Game
 
     //道具
     public float offset_setSkill = 120.0f;
+    public float time_speed_slowdown = 2.0f;
+    public float speed_max_rate = 2.5f;  //加速时相对于正常速度的比率
 
 }
 

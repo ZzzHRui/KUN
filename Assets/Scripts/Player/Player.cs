@@ -44,6 +44,8 @@ public class Player : MonoBehaviour
     public event Handler eventSetMonster;  //生成怪物
     public event Handler eventSetSkill;  //生成道具
     public event Handler eventDead;  //死亡
+    public event Handler eventSpeedMax;  //进入加速状态
+    public event Handler eventSpeedSlow;  //进入减速状态
 
     public int Power { 
         get => power;
@@ -70,8 +72,8 @@ public class Player : MonoBehaviour
     void Initialize()
     {
         SPEED_UP_NORMAL = Game.instance.speed_up_player;
-        SPEED_UP_MAX = 2.5f * SPEED_UP_NORMAL;
-        SPEED_SLOWDOWN_ADD = (-SPEED_UP_MAX + SPEED_UP_NORMAL) / 2.0f;
+        SPEED_UP_MAX = SPEED_UP_NORMAL * Game.instance.speed_max_rate;
+        SPEED_SLOWDOWN_ADD = (-SPEED_UP_MAX + SPEED_UP_NORMAL) / Game.instance.time_speed_slowdown;
         lastPos_Y_setPower = gameObject.transform.position.y;
         lastPos_Y_setMonster = lastPos_Y_setPower;
         lastPos_Y_setSkill = lastPos_Y_setPower;
@@ -197,7 +199,6 @@ public class Player : MonoBehaviour
         //判断死亡
 
         isProtecting = true;
-        print("beAttacked!");
     }
 
     //受到陷阱伤害，至少会保留1点能量
@@ -212,6 +213,7 @@ public class Player : MonoBehaviour
     public void SpeedMax()
     {
         speed_up = SPEED_UP_MAX;
+        eventSpeedMax();
     }
 
     public void GodIn()
@@ -222,7 +224,10 @@ public class Player : MonoBehaviour
     public void IntoState_None()
     {
         if(speed_up > SPEED_UP_NORMAL)
+        {
             state = STATE.SlowDown;
+            eventSpeedSlow();
+        }
         else
             state = STATE.None;
     }

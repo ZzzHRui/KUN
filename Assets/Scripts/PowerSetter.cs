@@ -5,6 +5,9 @@ using UnityEngine;
 /*用于生成power */
 public class PowerSetter : MonoBehaviour
 {
+    float OFFSET_DISTANCE_NORMAL = 0.5f;
+    float OFFSET_DISTANCE_SP = 1.0f;
+
     GameObject pre_power = null;   //能量预设体
     int setPointNum = 8;  //设置生成点的数量
     float minX = -2.6f;  //生成点平均分布在此范围内
@@ -15,10 +18,16 @@ public class PowerSetter : MonoBehaviour
     float offset_setPower_distance = 0.5f;  //用于生成本波能量的间距
     float offset_setPower_last = 0.0f;   //用于记录上一次生成的距离
 
-    float offset_setPower_min = 10.0f;
+    float offset_setPower_min = 7.0f;
     int offset_setPower_minQuantum = 0;  //用于随机生成下一次的offset_setPower，int类型减少开销
     int offset_setPower_maxQuantum = 6;
     float offset_setPower_perQuantum = 1f;  //每个单位的间隔距离
+    //特殊模式
+    float sp_time_last = 0.0f;
+    float sp_time_delay = 30.0f;
+    int sp_time_delay_min = 5;
+    int sp_time_delay_max = 10;
+    float sp_time_delay_per = 5.0f;
 
     List<List<int>>.Enumerator setMap;  //每个元素记录list的位置
 
@@ -52,6 +61,8 @@ public class PowerSetter : MonoBehaviour
         Player player = Game.instance.player.GetComponent<Player>();
         if(player != null)
             player.eventSetPower += OnSetPower;
+        sp_time_last = Time.time;
+        offset_setPower_last = Time.time;
     }
 
     // Update is called once per frame
@@ -82,6 +93,7 @@ public class PowerSetter : MonoBehaviour
                         Game.instance.offset_setPower /= 2.0f;
                     nowMode = MODE.None;
                     setMap.Dispose();
+                    offset_setPower_distance = OFFSET_DISTANCE_NORMAL;
                 }
                 offset_setPower_last = nowY;
             }
@@ -91,20 +103,41 @@ public class PowerSetter : MonoBehaviour
     void OnSetPower()
     {
         //生成模式
-        nowMode = (MODE)Random.Range(1, (int)MODE.End);
+        bool is_sp_time = Time.time - sp_time_last >= sp_time_delay;
+        if(is_sp_time)
+            nowMode = MODE.Cube;
+        else
+            nowMode = (MODE)Random.Range(1, (int)MODE.End);
         // nowMode = MODE.Diagonal;
         List<List<int>> setMap = new List<List<int>>();  //临时用的setMap
         int w = 0;  //宽、高
         int h = 0;
         int beginX = 0;
         int[] index;
+        
         switch (nowMode)
         {
             case MODE.Cube:
-                //宽2，高2-5
-                w = 2;
-                h = Random.Range(2, 6);
-                beginX = Random.Range(0, setPointNum - w + 1);
+                //开启特殊模式，特殊模式也是Cube的特殊情况
+                if(is_sp_time)
+                {
+                    offset_setPower_distance = OFFSET_DISTANCE_SP;
+                    w = Random.Range(0, setPointNum) > setPointNum / 2 ? setPointNum : setPointNum / 2;
+                    h = 20;
+                    if(w == setPointNum)
+                        beginX = 0;
+                    else
+                        beginX = Random.Range(0, 2) > 0 ? 0 : setPointNum / 2;
+                    sp_time_delay = (float)Random.Range(sp_time_delay_min, sp_time_delay_max) * sp_time_delay_per;
+                    sp_time_last = Time.time;
+                }
+                else
+                {
+                    //宽2，高3-6
+                    w = 3;
+                    h = Random.Range(3, 7);
+                    beginX = Random.Range(0, setPointNum - w + 1);
+                }
                 index = new int[w];
                 for(int i = 0; i < w; i++)
                     index[i] = beginX + i;
@@ -113,9 +146,9 @@ public class PowerSetter : MonoBehaviour
                 break;
 
             case MODE.Row:
-                //一整排，高1-2
+                //一整排，高2-3
                 w = setPointNum;
-                h = Random.Range(1, 3);
+                h = Random.Range(2, 4);
                 beginX = 0;
                 index = new int[w];
                 for(int i = 0; i < w; i++)
@@ -139,6 +172,7 @@ public class PowerSetter : MonoBehaviour
                 break;
 
             case MODE.Diagonal:
+                w = 2;
                 beginX = Random.Range(0, 2) * setPointNum / 2;  //要么从0要么从中间开始
                 index = new int[1];
                 int left2right = Random.Range(0, 2) * 2 - 1;  //左到右上升, ±1

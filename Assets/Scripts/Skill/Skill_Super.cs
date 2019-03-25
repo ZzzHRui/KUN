@@ -9,6 +9,7 @@ public class Skill_Super : SkillBase
     {
         base.Start();
         keepTime = 10.0f;
+        id = 1;
     }
 
     // Update is called once per frame
@@ -18,11 +19,12 @@ public class Skill_Super : SkillBase
 
     new void BeginSkill()
     {
-        base.BeginSkill();
         Player player = Game.instance.playerScript;
         player.SpeedMax();
         player.GodIn();
         //特效相关设置
+
+        base.BeginSkill();
     }
 
     new void OverSkill()

@@ -16,11 +16,7 @@ public class ScoreShow : MonoBehaviour
     void Update()
     {
         string temp = ",";
-        if(Input.touchCount == 1){
-            if(Input.GetTouch(0).phase == TouchPhase.Stationary){
-                temp += Input.GetTouch(0).position.x.ToString();
-            }
-        }
+        temp += Game.instance.playerScript.Power;
         text.text = Game.instance.Score.ToString() + temp;
     }
 }

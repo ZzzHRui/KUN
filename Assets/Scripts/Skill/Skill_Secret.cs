@@ -19,6 +19,7 @@ public class Skill_Secret : SkillBase
         setPowerNum = Random.Range(setPowerNum_min, setPowerNum_max + 1) * setPowerNum_per;
         pre_power = Game.instance.powerSetter.GetPrePower();
         keepTime = 2.0f;
+        id = 3;
     }
 
     // Update is called once per frame

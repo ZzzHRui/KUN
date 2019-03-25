@@ -174,12 +174,13 @@ public class MonsterSetter : MonoBehaviour
         {
             case SP_MODE.Mode1:
                 Game.instance.offset_setMonster = Game.instance.speed_up_player / 1.0f;
+                int secureNum = 2;  //保留2个空的作为出口
                 sp_monsterIdx = 3;
                 h = 10;
-                w = setPointNum - 2;  //保留2个空的作为出口
+                w = setPointNum - secureNum;
                 index = new int[w];
                 int next = 2;
-                beginX = Random.Range(2, setPointNum + 1);
+                beginX = Random.Range(secureNum, setPointNum + 1);
                 for(int i = 0; i < h; i++)
                 {
                     int now = beginX + next;
