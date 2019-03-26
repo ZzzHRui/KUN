@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     float SPEED_UP_NORMAL = 8.0f;
     float SPEED_UP_MAX = 16.0f;
     float SPEED_SLOWDOWN_ADD;
-    int POWER_MAX = 200;
+    int POWER_MAX = 100;
     //属性
     float speed_up = 8.0f;
     float maxSpeed_hor = 10.0f;
@@ -20,14 +20,16 @@ public class Player : MonoBehaviour
     int action = 0;
 
     STATE state = STATE.None;
-    float protectTime = 0.2f;  //受伤之后的无敌时间
+    float protectTime = 0.5f;  //受伤之后的无敌时间
     float dyingTime = 2.0f;  //死亡中的时间
-    bool isProtecting = false;
+    float powerUpTime = 1.0f;  //能量满了之后的保护时间
+    bool isProtecting = false;  //保护中不会受伤
     float stateTime_last = 0.0f;
     
     //技能相关
     bool portected = false;  //进入保护状态，免疫一次伤害
     bool god = false;  //无敌
+    bool usingSkill = false;
     CircleCollider2D getTrigger = null;
     float getTriggerRadius = 0.8f;
 
@@ -35,6 +37,7 @@ public class Player : MonoBehaviour
     {
         None = 0,  //普通状态
         SlowDown,  //减速到普通速度
+        PowerUp,  //满能量，一小段时间进入保护状态，免得
         Hurt,  //受伤状态
         Dying,  //死亡中
         End  //死亡，游戏结束
@@ -49,6 +52,7 @@ public class Player : MonoBehaviour
     public event Handler eventSpeedMax;  //进入加速状态
     public event Handler eventSpeedSlow;  //进入减速状态
     public event Handler eventPowerMax;  //能量满了
+    public event Handler eventBeAttack;  //被攻击，也意味着能量有降低
 
     public int Power { 
         get => power;
@@ -56,10 +60,7 @@ public class Player : MonoBehaviour
             if(value < 0)
                 power = 0; 
             else if(value >= POWER_MAX)
-            {
                 power = POWER_MAX;
-                eventPowerMax();
-            }
             else
                 power = value;
         }
@@ -94,6 +95,7 @@ public class Player : MonoBehaviour
         isProtecting = false;
         stateTime_last = Time.time;
         god = false;
+        usingSkill = false;
     }
 
     // Update is called once per frame
@@ -138,6 +140,15 @@ public class Player : MonoBehaviour
                     speed_up = SPEED_UP_NORMAL;
                     state = STATE.None;
                     god = false;
+                    isProtecting = false;
+                }
+                break;
+
+            case STATE.PowerUp:
+                if(Time.time - stateTime_last > powerUpTime)
+                {
+                    state = STATE.None;
+                    isProtecting = false;
                 }
                 break;
                     
@@ -171,11 +182,13 @@ public class Player : MonoBehaviour
         {
             if(rigid.velocity.x > -this.maxSpeed_hor)
                 force = this.force * -1.0f;
+            action = -1;
         }
         else if(Input.GetKey(KeyCode.RightArrow))
         {
             if(rigid.velocity.x < this.maxSpeed_hor)
                 force = this.force * 1.0f;
+            action = 1;
         }
         // //触屏测试
         // if(Input.touchCount == 1)  //有触摸
@@ -213,6 +226,8 @@ public class Player : MonoBehaviour
             Vector2 tempForce = new Vector2(force, 0);
             rigid.AddForce(tempForce, ForceMode2D.Impulse);
         }
+
+        gameObject.transform.rotation = Quaternion.Euler(0.0f, 0.0f, -action * 30.0f);
     }
 
     //被敌对势力攻击
@@ -228,6 +243,7 @@ public class Player : MonoBehaviour
         Power -= attack;
         state = STATE.Hurt;
         stateTime_last = Time.time;
+        eventBeAttack();
         //判断死亡
         if(Power < 1)
         {
@@ -255,16 +271,13 @@ public class Player : MonoBehaviour
         eventSpeedMax();
     }
 
-    public void GodIn()
-    {
-        god = true;
-    }
-
     public void IntoState_None()
     {
+        usingSkill = false;
         if(speed_up > SPEED_UP_NORMAL)
         {
             state = STATE.SlowDown;
+            stateTime_last = Time.time;
             eventSpeedSlow();
         }
         else
@@ -293,5 +306,29 @@ public class Player : MonoBehaviour
         if(right < -1 || right > 1)
             return;
         action = right;
+    }
+
+    public void GetPower(int power)
+    {
+        Power += power;
+        if(Power == POWER_MAX)
+        {
+            if(!usingSkill)  //如果当前正在技能的生效期间，则不再发布，避免无限技能
+                eventPowerMax();
+            state = STATE.PowerUp;
+            stateTime_last = Time.time;
+            isProtecting = true;
+        }
+    }
+
+    public void OnSkill_Super(bool isPlayerSkill)
+    {
+        if(state >= STATE.Dying)
+            return;
+        usingSkill = isPlayerSkill;
+        SpeedMax();
+        god = true;
+        state = STATE.None;
+        stateTime_last = Time.time;
     }
 }

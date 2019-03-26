@@ -11,7 +11,7 @@ public class CameraController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         GameObject player = Game.instance.player;
         if(player != null)

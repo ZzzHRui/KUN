@@ -17,12 +17,13 @@ public class Button_Skill : MonoBehaviour, IPointerDownHandler
         image = gameObject.GetComponent<Image>();
         image.enabled = false;
         Game.instance.playerScript.eventPowerMax += OnPowerMax;
+        Game.instance.playerScript.eventBeAttack += OnPowerDown;
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         skill = GameObject.Instantiate(pre_skill_super, Vector3.zero, Quaternion.identity);
-        skill.GetComponent<Skill_Super>().ForceBegin();
+        skill.GetComponent<Skill_Super>().ForceBegin(true);
         image.enabled = false;
     }
 
@@ -30,5 +31,10 @@ public class Button_Skill : MonoBehaviour, IPointerDownHandler
     {
         image.enabled = true;
         //特效
+    }
+
+    void OnPowerDown()
+    {
+        image.enabled = false;
     }
 }

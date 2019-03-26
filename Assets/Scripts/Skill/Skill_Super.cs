@@ -5,6 +5,8 @@ using UnityEngine;
 /*无敌加速状态 */
 public class Skill_Super : SkillBase
 {
+    bool isPlayerSkill = false;
+
     new public void Start()
     {
         base.Start();
@@ -19,9 +21,7 @@ public class Skill_Super : SkillBase
 
     new void BeginSkill()
     {
-        Player player = Game.instance.playerScript;
-        player.SpeedMax();
-        player.GodIn();
+        Game.instance.playerScript.OnSkill_Super(isPlayerSkill);
         //特效相关设置
 
         base.BeginSkill();
@@ -31,6 +31,8 @@ public class Skill_Super : SkillBase
     {
         Player player = Game.instance.playerScript;
         player.IntoState_None();
+        if(isPlayerSkill)
+            Game.instance.playerScript.BeHurted(150);  //技能结束后扣除150能量
         base.OverSkill();
     }
 
@@ -43,9 +45,10 @@ public class Skill_Super : SkillBase
         }
 	}
 
-    public void ForceBegin()
+    public void ForceBegin(bool isPlayerSkill)
     {
         /*强制启动此技能 */
+        this.isPlayerSkill = isPlayerSkill;
         Start();
         BeginSkill();
     }

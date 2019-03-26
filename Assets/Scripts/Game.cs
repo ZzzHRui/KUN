@@ -32,7 +32,7 @@ public class Game
     //难度
     public LEVEL Level = LEVEL.Level1;
     //背景
-    public float offset_updateBackground = 10.8f;  //更新背景的距离
+    public float offset_updateBackground = 12.8f;  //更新背景的距离
     public float speed_down_background;
 
     //摄像机

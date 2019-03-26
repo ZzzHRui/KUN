@@ -56,3 +56,5 @@ position赋值尽量改为translate函数（没有经过旋转的）
 怪物生成模式要修改，不要过于随机，要保证有足够的空间躲避
 
 优化power的lerp偏移过大
+
+monster0的运动问题

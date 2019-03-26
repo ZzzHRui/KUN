@@ -94,7 +94,7 @@ public class Power : MonoBehaviour
     void OnGetReward()
     {
         Game.instance.Score += score;
-        Game.instance.playerScript.Power += power;
+        Game.instance.playerScript.GetPower(power);
     }
 
     public void SetToDying()

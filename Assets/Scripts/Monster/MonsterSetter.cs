@@ -7,8 +7,8 @@ public class MonsterSetter : MonoBehaviour
     List<GameObject> pre_monsters;
 
     int setPointNum =8;  //设置生成点的数量
-    float minX = -2.6f;  //生成点平均分布在此范围内
-    float maxX = 2.6f;
+    float minX = -2.3f;  //生成点平均分布在此范围内
+    float maxX = 2.3f;
     float[] setPos_X;  //生成的位置
     float offset_setPosY = 10.0f;  //生成位置对于player的Y偏移量
     int[] monsterLevel;  //当前难度对应的可能出现的怪物表
