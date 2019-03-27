@@ -20,13 +20,14 @@ public class GameController : MonoBehaviour
         GameObject canvas = GameObject.Find("Canvas").gameObject;
         Game.instance.screenRect = canvas.GetComponent<RectTransform>();
         Game.instance.monsterSetter = gameObject.GetComponent<MonsterSetter>();
+        Game.instance.shakeCamera = Game.instance.camera.transform.Find("ShakeCamera").gameObject;
         Initilize();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-
+        Game.instance.playerScript.eventBeAttack += BeginShakeCamera;
     }
 
     // Update is called once per frame
@@ -42,6 +43,7 @@ public class GameController : MonoBehaviour
         Game.instance.offset_setPower = 1.0f;
         Game.instance.offset_setMonster = 10.0f;
         Game.instance.offset_setSkill = 120.0f;
+        Game.instance.shakeCamera.SetActive(false);
         Invoke("OnLevelUp", 32.0f);
     }
 
@@ -77,6 +79,15 @@ public class GameController : MonoBehaviour
                 Game.instance.Level = LEVEL.Level4;
                 eventLevelUp();
                 break;
+        }
+    }
+
+    void BeginShakeCamera()
+    {
+        if(Game.instance.shakeCamera != null)
+        {
+            Game.instance.shakeCamera.SetActive(true);
+            Game.instance.shakeCamera.GetComponent<ShakeCamera>().BeginShake();
         }
     }
 }

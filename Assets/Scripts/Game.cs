@@ -37,6 +37,7 @@ public class Game
 
     //摄像机
     public float offset_camera = 3.4f;  //摄像机和player的偏移距离
+    public GameObject shakeCamera;
 
     //能量
     public float offset_setPower;  //生成power的player的移动距离

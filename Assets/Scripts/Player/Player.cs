@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     float SPEED_UP_ADD;
     int POWER_MAX = 200;
     //属性
-    public float speed_up = 8.0f;
+    float speed_up = 8.0f;
     float maxSpeed_hor = 10.0f;
     float lastPos_Y_setPower = 0.0f;
     float lastPos_Y_setMonster = 0.0f;
@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
     int action = 0;
 
     STATE state = STATE.None;
-    float protectTime = 0.5f;  //受伤之后的无敌时间
+    float protectTime = 1.0f;  //受伤之后的无敌时间
     float dyingTime = 2.0f;  //死亡中的时间
     float powerUpTime = 1.0f;  //能量满了之后的保护时间
     bool isProtecting = false;  //保护中不会受伤
@@ -33,6 +33,10 @@ public class Player : MonoBehaviour
     bool usingSkill = false;
     CircleCollider2D getTrigger = null;
     float getTriggerRadius = 0.8f;
+    GameObject protectPopo = null;
+
+    //动画相关
+    Animator animator;
 
     enum STATE
     {
@@ -73,6 +77,8 @@ public class Player : MonoBehaviour
     {
         rigid = gameObject.GetComponent<Rigidbody2D>();
         getTrigger = gameObject.transform.Find("GetTrigger").GetComponent<CircleCollider2D>();
+        protectPopo = gameObject.transform.Find("sprite/body/protect").gameObject;
+        animator = gameObject.GetComponent<Animator>();
         Initialize();
     }
 
@@ -98,6 +104,10 @@ public class Player : MonoBehaviour
         stateTime_last = Time.time;
         god = false;
         usingSkill = false;
+        if(protectPopo != null)
+            protectPopo.SetActive(false);
+        if(animator != null)
+            animator.SetBool("BeAttack", false);
     }
 
     // Update is called once per frame
@@ -140,25 +150,22 @@ public class Player : MonoBehaviour
                 else
                 {
                     speed_up = SPEED_UP_NORMAL;
-                    state = STATE.None;
                     god = false;
-                    isProtecting = false;
+                    IntoState_None();
                 }
                 break;
 
             case STATE.PowerUp:
                 if(Time.time - stateTime_last > powerUpTime)
                 {
-                    state = STATE.None;
-                    isProtecting = false;
+                    IntoState_None();
                 }
                 break;
                     
             case STATE.Hurt:  //如果受伤致死则直接进入Dying状态，不需要在此判断是否死亡
                 if(Time.time - stateTime_last > protectTime)
                 {
-                    state = STATE.None;
-                    isProtecting = false;
+                    IntoState_None();
                 }
                 break;
                     
@@ -244,9 +251,12 @@ public class Player : MonoBehaviour
         if(portected)
         {
             portected = false;
+            protectPopo.SetActive(false);
             return;
         }
-        // Power -= attack;
+        
+        // Power -= attack;  //test, 临时关闭
+        animator.SetBool("BeAttack", true);
         state = STATE.Hurt;
         stateTime_last = Time.time;
         eventBeAttack();
@@ -258,7 +268,7 @@ public class Player : MonoBehaviour
             getTrigger.enabled = false;
             eventDead();
         }
-        isProtecting = true;  //死亡后一直保持保护状态不会再度受伤
+        isProtecting = true;  //死亡后也一直保持保护状态不会再度受伤
         //通知刷新power的UI，分数实时刷新即可
     }
 
@@ -287,11 +297,16 @@ public class Player : MonoBehaviour
             eventSpeedSlow();
         }
         else
+        {
             state = STATE.None;
+            isProtecting = false;
+        }
     }
 
     public void SetProtected(bool value=true)
     {
+        if(value)
+            protectPopo.SetActive(true);
         portected = value;
     }
 
@@ -318,6 +333,8 @@ public class Player : MonoBehaviour
     {
         if(state >= STATE.Dying)
             return;
+        if(Power == POWER_MAX)  //原本就满了不会触发
+            return;
         Power += power;
         if(Power == POWER_MAX)
         {
@@ -341,5 +358,10 @@ public class Player : MonoBehaviour
         god = true;
         state = STATE.None;
         stateTime_last = Time.time;
+    }
+
+    public void ResetAnimator_BeAttack()
+    {
+        animator.SetBool("BeAttack", false);
     }
 }

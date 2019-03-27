@@ -13,7 +13,7 @@ public class MonsterBase : MonoBehaviour
     protected void Start()
     {
         gameObject.transform.Rotate(0.0f, 0.0f, 180.0f);
-        Invoke("DestroyGameObject", 10.0f);  //防止有怪物意外不清除
+        Invoke("DestroyGameObject", 20.0f);  //防止有怪物意外不清除
     }
     
     protected void FixedUpdate()
