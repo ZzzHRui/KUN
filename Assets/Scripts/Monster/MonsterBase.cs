@@ -15,10 +15,9 @@ public class MonsterBase : MonoBehaviour
         gameObject.transform.Rotate(0.0f, 0.0f, 180.0f);
         Invoke("DestroyGameObject", 10.0f);  //防止有怪物意外不清除
     }
-
-    protected void Update()
+    
+    protected void FixedUpdate()
     {
-        // gameObject.transform.Translate(0.0f, -speed_down * Time.deltaTime, 0.0f);
         gameObject.transform.position += new Vector3(0.0f, -speed_down * Time.deltaTime, 0.0f);
     }
     

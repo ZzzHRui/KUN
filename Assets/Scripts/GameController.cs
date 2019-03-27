@@ -37,7 +37,6 @@ public class GameController : MonoBehaviour
     void Initilize()
     {
         Game.instance.Score = 0;
-        Game.instance.speed_up_player = 8.0f;
         Game.instance.Level = LEVEL.Level1;
         Game.instance.speed_down_background = 6.0f;
         Game.instance.offset_setPower = 1.0f;

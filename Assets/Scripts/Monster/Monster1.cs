@@ -21,18 +21,22 @@ public class Monster1 : MonsterBase
     }
 
     // Update is called once per frame
-   new void Update()
+    void Update()
     {
-        base.Update();
-        if(toRight)
-            gameObject.transform.position += new Vector3(speed_horizontal * Time.deltaTime, 0.0f, 0.0f);
-        else
-            gameObject.transform.position -= new Vector3(speed_horizontal * Time.deltaTime, 0.0f, 0.0f);
         if(gameObject.transform.position.x < left || gameObject.transform.position.x > right)
         {    
             toRight = !toRight;
             SetDirection(toRight);
         }
+    }
+
+    new void FixedUpdate()
+    {
+        base.FixedUpdate();
+        if(toRight)
+            gameObject.transform.position += new Vector3(speed_horizontal * Time.deltaTime, 0.0f, 0.0f);
+        else
+            gameObject.transform.position -= new Vector3(speed_horizontal * Time.deltaTime, 0.0f, 0.0f);
     }
 
     void SetDirection(bool toRight)

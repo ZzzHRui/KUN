@@ -12,6 +12,7 @@ public class MonsterSetter : MonoBehaviour
     float[] setPos_X;  //生成的位置
     float offset_setPosY = 10.0f;  //生成位置对于player的Y偏移量
     int[] monsterLevel;  //当前难度对应的可能出现的怪物表
+    float monsterZ = 15.0f;
 
     //特殊怪物群相关
     bool isSp = false;
@@ -119,13 +120,13 @@ public class MonsterSetter : MonoBehaviour
         
         index = new int[num];
         index[0] = Random.Range(0, setPointNum);
-            if(index.Length == 2)
-        index[1] = (index[0] + Random.Range(1, setPointNum / 2 + 1)) % setPointNum;
+        if(index.Length == 2)
+            index[1] = (index[0] + setPointNum / 2) % setPointNum;
         for(int i = 0; i < index.Length; i++)
         {
             monsterIdx = GetMonstIdx(Random.Range(0, monsterLevel[monsterLevel.Length - 1] + 1));
             GameObject nowObj = GameObject.Instantiate(pre_monsters[monsterIdx], 
-                new Vector3(setPos_X[index[0]], offset_setPosY + nowY, 0.0f),
+                new Vector3(setPos_X[index[0]], offset_setPosY + nowY, monsterZ),
                 Quaternion.identity);
         }
     }
@@ -155,7 +156,7 @@ public class MonsterSetter : MonoBehaviour
         List<int> internalList = setMap.Current;
         foreach(int x in internalList)
         {
-            Vector3 pos = new Vector3(setPos_X[x], offset_setPosY + nowY, 0.0f);
+            Vector3 pos = new Vector3(setPos_X[x], offset_setPosY + nowY, monsterZ);
             GameObject.Instantiate(pre_monsters[sp_monsterIdx], pos, Quaternion.identity);
         }
         if(!setMap.MoveNext())
@@ -243,9 +244,9 @@ public class MonsterSetter : MonoBehaviour
     {
         float rate;  //每秒产生的怪物波次，每拍0.5
         if(Game.instance.Level < LEVEL.Level3)
-            rate = 1.0f;
+            rate = 0.5f;
         else
-            rate = 1.3f;
+            rate = 0.75f;
         Game.instance.offset_setMonster = Game.instance.speed_up_player / rate;
     }
 

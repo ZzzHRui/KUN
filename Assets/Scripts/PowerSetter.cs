@@ -15,6 +15,7 @@ public class PowerSetter : MonoBehaviour
     float maxX = 2.3f;
     float[] setPos_X;  //生成的位置
     float offset_setPosY = 10.0f;  //生成位置对于player的Y偏移量
+    float powerZ = 5.0f;
 
     float offset_setPower_distance = 0.5f;  //用于生成本波能量的间距
     float offset_setPower_last = 0.0f;   //用于记录上一次生成的距离
@@ -94,7 +95,7 @@ public class PowerSetter : MonoBehaviour
                 {
                     if(pre_power)
                     {
-                        Vector3 pos = new Vector3(setPos_X[x], offset_setPosY + nowY, 0.0f);
+                        Vector3 pos = new Vector3(setPos_X[x], offset_setPosY + nowY, powerZ);
                         //todo, 如果生成道具，则此处改成道具的预设
                         GameObject.Instantiate(pre_power, pos, Quaternion.identity);
                     }

@@ -12,6 +12,7 @@ public class SkillController : MonoBehaviour
     float maxX = 2.6f;
     float[] setPos_X;  //生成的位置
     float offset_setPosY = 10.0f;  //生成位置对于player的Y偏移量
+    float skilZ = 0.0f;
 
     int offset_set_min = 10;
     int offset_set_max = 20;
@@ -62,7 +63,7 @@ public class SkillController : MonoBehaviour
         int skillIdx = Random.Range(0, pre_skills.Length);
         float playerY = Game.instance.player.transform.position.y;
         float x = setPos_X[Random.Range(0, setPos_X.Length)];
-        GameObject.Instantiate(pre_skills[skillIdx], new Vector3(x, playerY + offset_setPosY, 0.0f), Quaternion.identity);
+        GameObject.Instantiate(pre_skills[skillIdx], new Vector3(x, playerY + offset_setPosY, skilZ), Quaternion.identity);
         //生成下一次间距
         Game.instance.offset_setSkill = (float)Random.Range(offset_set_min, offset_set_max + 1) * offset_set_per;
     }

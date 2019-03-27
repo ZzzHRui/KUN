@@ -42,6 +42,7 @@ public class SkillBase : MonoBehaviour
 
     public void DestoryGameObject()
     {
+        this.enabled = false;
         if(gameObject != null)
             Destroy(gameObject);
     }

@@ -10,12 +10,12 @@ public class Monster2 : MonsterBase
     {
         base.Start();
         attack = Game.instance.attack[2];
-        speed_down = speed_down_min - 1.0f;
+        speed_down = speed_down_min;
     }
 
     // Update is called once per frame
-    new void Update()
+    new void FixedUpdate()
     {
-        base.Update();
+        base.FixedUpdate();
     }
 }

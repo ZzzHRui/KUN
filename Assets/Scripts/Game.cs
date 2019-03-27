@@ -28,7 +28,7 @@ public class Game
     private int score;  //分数
     public int Score { get => score; set => score = value; }
     //player
-    public float speed_up_player;
+    public float speed_up_player = 5.0f;
     //难度
     public LEVEL Level = LEVEL.Level1;
     //背景

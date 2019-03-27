@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    float SPEED_UP_NORMAL = 8.0f;
-    float SPEED_UP_MAX = 16.0f;
+    float SPEED_UP_NORMAL;
+    float SPEED_UP_MAX;
     float SPEED_SLOWDOWN_ADD;
-    int POWER_MAX = 100;
+    float SPEED_UP_ADD;
+    int POWER_MAX = 200;
     //属性
-    float speed_up = 8.0f;
+    public float speed_up = 8.0f;
     float maxSpeed_hor = 10.0f;
     float lastPos_Y_setPower = 0.0f;
     float lastPos_Y_setMonster = 0.0f;
@@ -84,6 +85,7 @@ public class Player : MonoBehaviour
         SPEED_UP_NORMAL = Game.instance.speed_up_player;
         SPEED_UP_MAX = SPEED_UP_NORMAL * Game.instance.speed_max_rate;
         SPEED_SLOWDOWN_ADD = (-SPEED_UP_MAX + SPEED_UP_NORMAL) / Game.instance.time_speed_slowdown;
+        // SPEED_UP_ADD = SPEED_UP_NORMAL / 1.0f;
         lastPos_Y_setPower = gameObject.transform.position.y;
         lastPos_Y_setMonster = lastPos_Y_setPower;
         lastPos_Y_setSkill = lastPos_Y_setPower;
@@ -101,10 +103,10 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //改变y值
-        float y = this.speed_up * Time.deltaTime;
-        Vector3 deltaPos =  new Vector3(0, y, 0);
-        gameObject.transform.position += deltaPos;
+        // //改变y值
+        // float y = this.speed_up * Time.deltaTime;
+        // Vector3 deltaPos =  new Vector3(0, y, 0);
+        // gameObject.transform.position += deltaPos;
         //生成power检查
         float nowY = gameObject.transform.position.y;
         if(nowY - lastPos_Y_setPower >= Game.instance.offset_setPower)
@@ -176,6 +178,10 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
+        //改变y值
+        float y = this.speed_up * Time.deltaTime;
+        Vector3 deltaPos =  new Vector3(0, y, 0);
+        gameObject.transform.position += deltaPos;
         //横向施力
         float force = 0.0f;
         if(Input.GetKey(KeyCode.LeftArrow))
@@ -240,7 +246,7 @@ public class Player : MonoBehaviour
             portected = false;
             return;
         }
-        Power -= attack;
+        // Power -= attack;
         state = STATE.Hurt;
         stateTime_last = Time.time;
         eventBeAttack();
@@ -310,13 +316,18 @@ public class Player : MonoBehaviour
 
     public void GetPower(int power)
     {
+        if(state >= STATE.Dying)
+            return;
         Power += power;
         if(Power == POWER_MAX)
         {
             if(!usingSkill)  //如果当前正在技能的生效期间，则不再发布，避免无限技能
                 eventPowerMax();
-            state = STATE.PowerUp;
-            stateTime_last = Time.time;
+            if(state != STATE.SlowDown)
+            {
+                state = STATE.PowerUp;
+                stateTime_last = Time.time;
+            }
             isProtecting = true;
         }
     }

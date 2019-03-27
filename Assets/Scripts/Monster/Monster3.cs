@@ -19,9 +19,9 @@ public class Monster3 : MonsterBase
     }
 
     // Update is called once per frame
-    new void Update()
+    new void FixedUpdate()
     {
-        base.Update();
+        base.FixedUpdate();
         if(Time.time - beginTime < speedUpTime)
             speed_down += speed_add1 * Time.deltaTime;
         else

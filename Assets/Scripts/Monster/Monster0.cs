@@ -32,9 +32,9 @@ public class Monster0 : MonsterBase
         SetDirectionAndSpeed(Game.instance.monsterSetter.GetSetPoint_X());
     }
 
-    new void Update()
+    new void FixedUpdate()
     {
-        base.Update();
+        base.FixedUpdate();
         gameObject.transform.position += new Vector3(speed_horizontal * Time.deltaTime, 0.0f, 0.0f);
     }
 
