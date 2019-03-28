@@ -15,16 +15,22 @@ public class Button_Skill : MonoBehaviour, IPointerDownHandler
         if(pre_skill_super == null)
             pre_skill_super = (GameObject)Resources.Load("Prefabs/Skill/Skill_Super");
         image = gameObject.GetComponent<Image>();
-        image.enabled = false;
         Game.instance.playerScript.eventPowerMax += OnPowerMax;
         Game.instance.playerScript.eventBeAttack += OnPowerDown;
+        Initialize();
+    }
+
+    public void Initialize()
+    {
+        if(image != null)
+            image.enabled = false;
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         skill = GameObject.Instantiate(pre_skill_super, Vector3.zero, Quaternion.identity);
         skill.GetComponent<Skill_Super>().ForceBegin(true);
-        // image.enabled = false;
+        image.enabled = false;
     }
 
     void OnPowerMax()
@@ -35,6 +41,6 @@ public class Button_Skill : MonoBehaviour, IPointerDownHandler
 
     void OnPowerDown()
     {
-        // image.enabled = false;
+        image.enabled = false;
     }
 }

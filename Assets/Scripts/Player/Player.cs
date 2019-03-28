@@ -113,10 +113,6 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // //改变y值
-        // float y = this.speed_up * Time.deltaTime;
-        // Vector3 deltaPos =  new Vector3(0, y, 0);
-        // gameObject.transform.position += deltaPos;
         //生成power检查
         float nowY = gameObject.transform.position.y;
         if(nowY - lastPos_Y_setPower >= Game.instance.offset_setPower)
@@ -255,7 +251,7 @@ public class Player : MonoBehaviour
             return;
         }
         
-        // Power -= attack;  //test, 临时关闭
+        Power -= attack;
         animator.SetBool("BeAttack", true);
         state = STATE.Hurt;
         stateTime_last = Time.time;
