@@ -8,9 +8,9 @@ public class Monster2 : MonsterBase
     // Start is called before the first frame update
     new void Start()
     {
-        base.Start();
         attack = Game.instance.attack[2];
         speed_down = speed_down_min;
+        base.Start();
     }
 
     // Update is called once per frame

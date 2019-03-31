@@ -5,20 +5,20 @@ using UnityEngine;
 /*固定角度直线移动*/
 public class Monster0 : MonsterBase
 {
-    float speed_horizontal = 0.0f;
+    public float speed_horizontal = 0.0f;
+    Vector3 deltaPos_X = Vector3.zero;
     // Start is called before the first frame update
     new void Start()
     {
-        base.Start();
         attack = Game.instance.attack[0];
         switch(Game.instance.Level)
         {
             case LEVEL.Level1:
-                speed_down = Random.Range(0, 11) * 0.5f + speed_down_min;
+                speed_down = Random.Range(3, 9) * 0.5f + speed_down_min;
                 break;
 
             case LEVEL.Level2:
-                speed_down = Random.Range(6, 16) * 0.5f + speed_down_min;
+                speed_down = Random.Range(5, 10) * 0.5f + speed_down_min;
                 break;
 
             case LEVEL.Level3:
@@ -30,12 +30,16 @@ public class Monster0 : MonsterBase
                 break;
         }
         SetDirectionAndSpeed(Game.instance.monsterSetter.GetSetPoint_X());
+        base.Start();
     }
 
     new void FixedUpdate()
     {
         base.FixedUpdate();
-        gameObject.transform.position += new Vector3(speed_horizontal * Time.deltaTime, 0.0f, 0.0f);
+        if(fly)
+            return;
+        deltaPos_X.Set(speed_horizontal * Time.deltaTime, 0.0f, 0.0f);
+        gameObject.transform.position += deltaPos_X;
     }
 
     public void SetDirectionAndSpeed(float[] setPos_X)

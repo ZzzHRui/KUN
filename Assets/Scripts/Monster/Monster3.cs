@@ -12,16 +12,18 @@ public class Monster3 : MonsterBase
     // Start is called before the first frame update
     new void Start()
     {
-        base.Start();
         attack = Game.instance.attack[3];
         beginTime = Time.time;
         speed_down = -1.0f;
+        base.Start();
     }
 
     // Update is called once per frame
     new void FixedUpdate()
     {
         base.FixedUpdate();
+        if(fly)
+            return;
         if(Time.time - beginTime < speedUpTime)
             speed_down += speed_add1 * Time.deltaTime;
         else

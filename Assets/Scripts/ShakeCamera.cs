@@ -17,19 +17,19 @@ public class ShakeCamera : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
-		// if(nowNum > shakeNum)
-		// {
-		// 	this.gameObject.SetActive(false);//解除此摄像机
-		// }
-		// float lerp = Time.deltaTime / shakeDelay;
-		// hasLerp += lerp;
-		// gameObject.transform.localPosition = Vector3.Lerp(gameObject.transform.localPosition, shakePos, hasLerp);
-		// if(hasLerp >= 1.0f)
-		// {
-		// 	GetNewPos();
-		// 	nowNum++;
-		// 	hasLerp = 0.0f;
-		// }
+		if(nowNum > shakeNum)
+		{
+			this.gameObject.SetActive(false);//解除此摄像机
+		}
+		float lerp = Time.deltaTime / shakeDelay;
+		hasLerp += lerp;
+		gameObject.transform.localPosition = Vector3.Lerp(gameObject.transform.localPosition, shakePos, hasLerp);
+		if(hasLerp >= 1.0f)
+		{
+			GetNewPos();
+			nowNum++;
+			hasLerp = 0.0f;
+		}
 
 
 		// if(Time.time-time >= shakingTime){

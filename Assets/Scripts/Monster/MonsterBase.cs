@@ -6,9 +6,12 @@ public class MonsterBase : MonoBehaviour
 {
     protected float scale = 1.0f;
     protected int attack = 0;
-    protected float speed_down = 0.0f;
+    public float speed_down = 0.0f;
     protected float speed_down_min = -1.0f;
     bool hasCollide = false;
+    protected Vector3 deltaPos;
+    protected bool fly = false;
+    float speed_X = 0.0f;
 
     protected void Start()
     {
@@ -18,15 +21,36 @@ public class MonsterBase : MonoBehaviour
     
     protected void FixedUpdate()
     {
-        gameObject.transform.position += new Vector3(0.0f, -speed_down * Time.deltaTime, 0.0f);
+        if(!fly)
+        {
+            deltaPos.Set(0.0f, -speed_down * Time.deltaTime, 0.0f);
+        }
+        else
+        {
+            if(speed_down < 0)
+                speed_down += 20.0f * Time.deltaTime;
+            gameObject.transform.Rotate(0.0f, 0.0f, 360.0f * Time.deltaTime);
+            deltaPos.Set(speed_X * Time.deltaTime, -speed_down * Time.deltaTime, 0.0f);
+        }
+        gameObject.transform.position += deltaPos;
     }
     
     protected void OnTriggerEnter2D(Collider2D other) {
         if(other.tag != "Player" || hasCollide)
             return;
         Game.instance.playerScript.BeAttacked(attack);
-        var collider = gameObject.GetComponent<Collider2D>();
         hasCollide = true;
+        //如果player处于无敌加速状态，则怪物会进入被撞飞状态
+        if(Game.instance.playerScript.IsSuper())
+        // if(true)  //test
+        {
+            fly = true;
+            speed_down = -20.0f;
+            if(Game.instance.player.transform.position.x > gameObject.transform.position.x)
+                speed_X = (float)(Random.Range(-5, 0));
+            else
+                speed_X = (float)(Random.Range(1, 6));
+        }
     }
 
     protected void DestroyGameObject()

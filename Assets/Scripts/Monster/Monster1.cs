@@ -9,15 +9,16 @@ public class Monster1 : MonsterBase
     float left = -2.6f;
     float right = 2.6f;
     bool toRight;
+    Vector3 deltaPos_X = Vector3.zero;
 
     // Start is called before the first frame update
     new void Start()
     {
-        base.Start();
         attack = Game.instance.attack[1];
         toRight = Random.Range(0, 2) == 1 ? true : false;
         SetDirection(toRight);
         speed_down = speed_down_min - 1.0f;
+        base.Start();
     }
 
     // Update is called once per frame
@@ -33,10 +34,13 @@ public class Monster1 : MonsterBase
     new void FixedUpdate()
     {
         base.FixedUpdate();
+        if(fly)
+            return;
+        deltaPos_X.Set(speed_horizontal * Time.deltaTime, 0.0f, 0.0f);
         if(toRight)
-            gameObject.transform.position += new Vector3(speed_horizontal * Time.deltaTime, 0.0f, 0.0f);
+            gameObject.transform.position += deltaPos_X;
         else
-            gameObject.transform.position -= new Vector3(speed_horizontal * Time.deltaTime, 0.0f, 0.0f);
+            gameObject.transform.position -= deltaPos_X;
     }
 
     void SetDirection(bool toRight)

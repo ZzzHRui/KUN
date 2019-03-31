@@ -73,8 +73,7 @@ public class PowerSetter : MonoBehaviour
         active = true;
         sp_time_last = Time.time;
         offset_setPower_distance = OFFSET_DISTANCE_NORMAL;
-        offset_setPower_last = Time.time;
-        sp_time_last = 0.0f;
+        offset_setPower_last = 0.0f;
         sp_time_delay = 30.0f;
         setMap.Dispose();
     }
@@ -106,7 +105,7 @@ public class PowerSetter : MonoBehaviour
                     Game.instance.offset_setPower = (float)UnityEngine.Random.Range(offset_setPower_minQuantum, offset_setPower_maxQuantum) 
                                             * offset_setPower_perQuantum + offset_setPower_min;
                     if(Game.instance.Level >= LEVEL.Level3)
-                        Game.instance.offset_setPower /= 2.0f;
+                        Game.instance.offset_setPower /= 1.5f;
                     nowMode = MODE.None;
                     setMap.Dispose();
                     offset_setPower_distance = OFFSET_DISTANCE_NORMAL;

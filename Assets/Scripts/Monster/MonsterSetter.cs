@@ -67,8 +67,8 @@ public class MonsterSetter : MonoBehaviour
     {
         OnLevelUp();
         sp_lastTime = Time.time;
+        sp_delay = 0.0f;
         isSp = false;
-        sp_lastTime = float.MaxValue;
         sp_monsterIdx = -1;
         nowMode = SP_MODE.None;
         setMap.Dispose();

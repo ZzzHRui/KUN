@@ -329,13 +329,14 @@ public class Player : MonoBehaviour
     {
         if(state >= STATE.Dying)
             return;
-        if(Power == POWER_MAX)  //原本就满了不会触发
-            return;
+        int lastPower = Power;
         Power += power;
         if(Power == POWER_MAX)
         {
             if(!usingSkill)  //如果当前正在技能的生效期间，则不再发布，避免无限技能
                 eventPowerMax();
+            if(lastPower == POWER_MAX)  //原本就满了
+                return;
             if(state != STATE.SlowDown)
             {
                 state = STATE.PowerUp;
@@ -359,5 +360,14 @@ public class Player : MonoBehaviour
     public void ResetAnimator_BeAttack()
     {
         animator.SetBool("BeAttack", false);
+    }
+
+    public bool IsSuper()
+    {
+        //判断是否处于无敌加速状态
+        if(god == true && speed_up >= SPEED_UP_MAX)
+            return true;
+        else
+            return false;
     }
 }

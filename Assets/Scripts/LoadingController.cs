@@ -27,6 +27,10 @@ public class LoadingController : MonoBehaviour
         {
             op.allowSceneActivation = true;
         }
+        if(finished && Input.anyKey)  //test， 后续删除
+        {
+            op.allowSceneActivation = true;
+        }
         if(finished)
             return;
         progress = (int)(op.progress * 100.0f);

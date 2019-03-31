@@ -32,7 +32,9 @@ public class OverPanel : PanelBase
 
     public void OnButtonClick_Restart()
     {
+        score.text = "restart1";  //test，删除
         Game.instance.gameController.InitilizeAll();
+        score.text = "restart2";  //test，删除
         Close();
     }
 
