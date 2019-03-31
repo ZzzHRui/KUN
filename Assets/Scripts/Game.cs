@@ -16,6 +16,7 @@ public class Game
 
     public GameController gameController = null;
     public BackgroundController backgroundController = null;
+    public BackgroundController foregroundController = null;
     public PowerSetter powerSetter = null;
     public SkillController skillController = null;
     public MonsterSetter monsterSetter = null;
@@ -23,6 +24,7 @@ public class Game
     public Player playerScript = null;
     public Camera camera = null;
     public GameObject[] backgrounds = null;
+    public GameObject[] foregrounds = null;
     public RectTransform screenRect;
 
     private int score;  //分数
@@ -31,9 +33,10 @@ public class Game
     public float speed_up_player = 5.0f;
     //难度
     public LEVEL Level = LEVEL.Level1;
-    //背景
-    public float offset_updateBackground = 12.8f;  //更新背景的距离
+    //背景前景
+    public float offset_updateBackground = 12.8f;  //更新背景前景的距离
     public float speed_down_background;
+    public float speed_down_foreground;
 
     //摄像机
     public float offset_camera = 3.4f;  //摄像机和player的偏移距离

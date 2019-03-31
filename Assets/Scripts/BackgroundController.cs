@@ -12,6 +12,9 @@ public class BackgroundController : MonoBehaviour
     float z = 20.0f;  //本物体的position.z值
     GameObject player;
     STATE nowState = STATE.Normal;
+    Vector3 deltaPos = Vector3.zero;
+    GameObject[] backgrounds;
+    public bool isForeground = false;
 
     enum STATE
     {
@@ -26,11 +29,16 @@ public class BackgroundController : MonoBehaviour
         Player p = player.GetComponent<Player>();
         p.eventSpeedMax += OnSpeedMax;
         p.eventSpeedSlow += OnSpeedSlowDown;
-
-        SPEED_NORMAL = Game.instance.speed_down_background;
+        if(isForeground)
+            SPEED_NORMAL = Game.instance.speed_down_foreground;
+        else
+            SPEED_NORMAL = Game.instance.speed_down_background;
         SPEED_MAX = SPEED_NORMAL * Game.instance.speed_max_rate;
         SPEED_SLOWDOWN_ADD = -(SPEED_MAX - SPEED_NORMAL) / Game.instance.time_speed_slowdown;
-
+        if(isForeground)
+            backgrounds = Game.instance.foregrounds;
+        else
+            backgrounds = Game.instance.backgrounds;
         Initialize();
     }
 
@@ -70,8 +78,7 @@ public class BackgroundController : MonoBehaviour
         float y = player.transform.position.y;
         gameObject.transform.position = new Vector3(0, y, z);  //更新自身位置
         //子物体相对后移
-        Vector3 deltaPos = new Vector3(0, speed * Time.deltaTime, 0);
-        GameObject[] backgrounds = Game.instance.backgrounds;
+        deltaPos.Set(0, speed * Time.deltaTime, 0);
         for(int i = 0; i < backgrounds.Length; i++)
         {
             if(player.transform.position.y - backgrounds[i].transform.position.y > Game.instance.offset_updateBackground)
@@ -83,7 +90,6 @@ public class BackgroundController : MonoBehaviour
 
     void OnUpadateBackground()
     {
-        GameObject[] backgrounds = Game.instance.backgrounds;
         backgrounds[nextIdx % backgrounds.Length].transform.localPosition += new Vector3(0, backgrounds.Length * Game.instance.offset_updateBackground, 0);
         nextIdx++;
     }

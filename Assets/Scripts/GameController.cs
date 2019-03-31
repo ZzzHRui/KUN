@@ -14,9 +14,11 @@ public class GameController : MonoBehaviour
         Game.instance.playerScript = Game.instance.player.GetComponent<Player>();
         Game.instance.camera = Camera.main;
         Game.instance.backgrounds = GameObject.FindGameObjectsWithTag("Background");
+        Game.instance.foregrounds = GameObject.FindGameObjectsWithTag("Foreground");
         Game.instance.powerSetter = gameObject.GetComponent<PowerSetter>();
         Game.instance.skillController = gameObject.GetComponent<SkillController>();
         Game.instance.backgroundController = GameObject.Find("Backgrounds").GetComponent<BackgroundController>();
+        Game.instance.foregroundController = GameObject.Find("Foregrounds").GetComponent<BackgroundController>();
         GameObject canvas = GameObject.Find("Canvas").gameObject;
         Game.instance.screenRect = canvas.GetComponent<RectTransform>();
         Game.instance.monsterSetter = gameObject.GetComponent<MonsterSetter>();
@@ -39,6 +41,7 @@ public class GameController : MonoBehaviour
         Game.instance.Score = 0;
         Game.instance.Level = LEVEL.Level1;
         Game.instance.speed_down_background = 6.0f;
+        Game.instance.speed_down_foreground = 4.0f;
         Game.instance.offset_setPower = 1.0f;
         Game.instance.offset_setMonster = 10.0f;
         Game.instance.offset_setSkill = 120.0f;
@@ -54,6 +57,7 @@ public class GameController : MonoBehaviour
         Game.instance.monsterSetter.Initialize();
         Game.instance.powerSetter.Initialize();
         Game.instance.backgroundController.Initialize();
+        Game.instance.foregroundController.Initialize();
         Game.instance.skillController.Initialize();
         Game.instance.skillButton.Initialize();
     }
