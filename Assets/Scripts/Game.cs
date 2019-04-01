@@ -16,7 +16,7 @@ public class Game
 
     public GameController gameController = null;
     public BackgroundController backgroundController = null;
-    public BackgroundController foregroundController = null;
+    public ForegroundController foregroundController = null;
     public PowerSetter powerSetter = null;
     public SkillController skillController = null;
     public MonsterSetter monsterSetter = null;

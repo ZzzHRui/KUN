@@ -7,14 +7,13 @@ public class BackgroundController : MonoBehaviour
     float SPEED_NORMAL = 6.0f;
     float SPEED_MAX;
     float SPEED_SLOWDOWN_ADD;
-    int nextIdx = 0;
     float speed = 6.0f;  //相对于player的位移速度
     float z = 20.0f;  //本物体的position.z值
     GameObject player;
     STATE nowState = STATE.Normal;
     Vector3 deltaPos = Vector3.zero;
     GameObject[] backgrounds;
-    public bool isForeground = false;
+    public float offset_rate = 0.03f;
 
     enum STATE
     {
@@ -29,16 +28,10 @@ public class BackgroundController : MonoBehaviour
         Player p = player.GetComponent<Player>();
         p.eventSpeedMax += OnSpeedMax;
         p.eventSpeedSlow += OnSpeedSlowDown;
-        if(isForeground)
-            SPEED_NORMAL = Game.instance.speed_down_foreground;
-        else
-            SPEED_NORMAL = Game.instance.speed_down_background;
+         SPEED_NORMAL = Game.instance.speed_down_background;
         SPEED_MAX = SPEED_NORMAL * Game.instance.speed_max_rate;
         SPEED_SLOWDOWN_ADD = -(SPEED_MAX - SPEED_NORMAL) / Game.instance.time_speed_slowdown;
-        if(isForeground)
-            backgrounds = Game.instance.foregrounds;
-        else
-            backgrounds = Game.instance.backgrounds;
+        backgrounds = Game.instance.backgrounds;
         Initialize();
     }
 
@@ -51,7 +44,6 @@ public class BackgroundController : MonoBehaviour
             Game.instance.backgrounds[i].transform.localPosition = new Vector3(0, Game.instance.offset_updateBackground * i, 0);
         }
         speed = SPEED_NORMAL;
-        nextIdx = 0;
         nowState = STATE.Normal;
     }
 
@@ -75,23 +67,23 @@ public class BackgroundController : MonoBehaviour
                 }
                 break;
         }
-        float y = player.transform.position.y;
-        gameObject.transform.position = new Vector3(0, y, z);  //更新自身位置
+        gameObject.transform.position = new Vector3(-player.transform.position.x * offset_rate, player.transform.position.y, z);  //更新自身位置
         //子物体相对后移
-        deltaPos.Set(0, speed * Time.deltaTime, 0);
+        deltaPos = new Vector3(0, speed * Time.deltaTime, 0);
         for(int i = 0; i < backgrounds.Length; i++)
         {
             if(player.transform.position.y - backgrounds[i].transform.position.y > Game.instance.offset_updateBackground)
-                OnUpadateBackground();
+            {
+                OnUpadateBackground(i);
+            }
             backgrounds[i].transform.localPosition -= deltaPos;
         }
 
     }
 
-    void OnUpadateBackground()
+    void OnUpadateBackground(int i)
     {
-        backgrounds[nextIdx % backgrounds.Length].transform.localPosition += new Vector3(0, backgrounds.Length * Game.instance.offset_updateBackground, 0);
-        nextIdx++;
+        backgrounds[i].transform.localPosition += new Vector3(0, backgrounds.Length * Game.instance.offset_updateBackground, 0);
     }
 
     void OnSpeedMax()

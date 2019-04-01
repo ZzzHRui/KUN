@@ -18,7 +18,7 @@ public class GameController : MonoBehaviour
         Game.instance.powerSetter = gameObject.GetComponent<PowerSetter>();
         Game.instance.skillController = gameObject.GetComponent<SkillController>();
         Game.instance.backgroundController = GameObject.Find("Backgrounds").GetComponent<BackgroundController>();
-        Game.instance.foregroundController = GameObject.Find("Foregrounds").GetComponent<BackgroundController>();
+        Game.instance.foregroundController = GameObject.Find("Foregrounds").GetComponent<ForegroundController>();
         GameObject canvas = GameObject.Find("Canvas").gameObject;
         Game.instance.screenRect = canvas.GetComponent<RectTransform>();
         Game.instance.monsterSetter = gameObject.GetComponent<MonsterSetter>();
@@ -38,6 +38,7 @@ public class GameController : MonoBehaviour
 
     void Initilize()
     {
+        StopAllCoroutines();
         Game.instance.Score = 0;
         Game.instance.Level = LEVEL.Level1;
         Game.instance.speed_down_background = 6.0f;
