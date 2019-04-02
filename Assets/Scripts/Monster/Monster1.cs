@@ -8,6 +8,7 @@ public class Monster1 : MonsterBase
     float speed_horizontal = 6.0f;  //横向移动速度
     float left = -2.6f;
     float right = 2.6f;
+    float targetX;
     bool toRight;
     Vector3 deltaPos_X = Vector3.zero;
 
@@ -24,7 +25,7 @@ public class Monster1 : MonsterBase
     // Update is called once per frame
     void Update()
     {
-        if(gameObject.transform.position.x < left || gameObject.transform.position.x > right)
+        if(toRight ^ gameObject.transform.position.x <= targetX)
         {    
             toRight = !toRight;
             SetDirection(toRight);
@@ -47,8 +48,14 @@ public class Monster1 : MonsterBase
     {
         gameObject.transform.rotation = Quaternion.identity;
         if(toRight)
+        {
             gameObject.transform.Rotate(0.0f, 0.0f, 225.0f);
+            targetX = right;
+        }    
         else
+        {
             gameObject.transform.Rotate(0.0f, 0.0f, 135.0f);
+            targetX = left;
+        }
     }
 }

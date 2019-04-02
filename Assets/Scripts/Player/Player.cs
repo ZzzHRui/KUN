@@ -285,6 +285,8 @@ public class Player : MonoBehaviour
 
     public void IntoState_None()
     {
+        if(usingSkill)  
+            BeHurted(150);  //技能结束后扣除150能量
         usingSkill = false;
         if(speed_up > SPEED_UP_NORMAL)
         {

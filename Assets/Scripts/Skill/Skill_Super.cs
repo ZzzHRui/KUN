@@ -31,8 +31,6 @@ public class Skill_Super : SkillBase
     {
         Player player = Game.instance.playerScript;
         player.IntoState_None();
-        if(isPlayerSkill)
-            Game.instance.playerScript.BeHurted(150);  //技能结束后扣除150能量
         base.OverSkill();
     }
 
