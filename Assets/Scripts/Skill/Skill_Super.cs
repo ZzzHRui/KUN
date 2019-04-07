@@ -23,7 +23,7 @@ public class Skill_Super : SkillBase
     {
         Game.instance.playerScript.OnSkill_Super(isPlayerSkill);
         //特效相关设置
-
+        Game.instance.playerScript.OnSuperLight();
         base.BeginSkill();
     }
 

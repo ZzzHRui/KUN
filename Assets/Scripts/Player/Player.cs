@@ -34,6 +34,9 @@ public class Player : MonoBehaviour
     CircleCollider2D getTrigger = null;
     float getTriggerRadius = 0.8f;
     GameObject protectPopo = null;
+    ParticleSystem superLight_out = null;  //加速雨效果
+    List<ParticleSystem> superLights_in = null;  //自身加速效果
+    List<ParticleSystem> magnetLights = null;  //磁铁效果
 
     //动画相关
     Animator animator;
@@ -79,6 +82,23 @@ public class Player : MonoBehaviour
         getTrigger = gameObject.transform.Find("GetTrigger").GetComponent<CircleCollider2D>();
         protectPopo = gameObject.transform.Find("sprite/body/protect").gameObject;
         animator = gameObject.GetComponent<Animator>();
+        GameObject temp = Camera.main.transform.Find("superLight").gameObject;
+        if(temp != null)
+            superLight_out = temp.GetComponent<ParticleSystem>();
+        temp = gameObject.transform.Find("sprite/superLight/superLight1").gameObject;
+        superLights_in = new List<ParticleSystem>();
+        if(temp != null)
+            superLights_in.Add(temp.GetComponent<ParticleSystem>());
+        temp = gameObject.transform.Find("sprite/superLight/superLight2").gameObject;
+        if(temp != null)
+            superLights_in.Add(temp.GetComponent<ParticleSystem>());
+        magnetLights = new List<ParticleSystem>();
+        temp = gameObject.transform.Find("sprite/magnetLight/magnetLight1").gameObject;
+        if(temp != null)
+            magnetLights.Add(temp.GetComponent<ParticleSystem>());
+        temp = gameObject.transform.Find("sprite/magnetLight/magnetLight2").gameObject;
+        if(temp != null)
+            magnetLights.Add(temp.GetComponent<ParticleSystem>());
         Initialize();
     }
 
@@ -108,6 +128,18 @@ public class Player : MonoBehaviour
             protectPopo.SetActive(false);
         if(animator != null)
             animator.SetBool("BeAttack", false);
+        if(superLight_out != null)
+            superLight_out.Stop();
+        if(superLights_in != null)
+        {
+            foreach(ParticleSystem n in superLights_in)
+                n.Stop();
+        }
+        if(magnetLights != null)
+        {
+            foreach(ParticleSystem n in magnetLights)
+                n.Stop();
+        }
     }
 
     // Update is called once per frame
@@ -316,7 +348,14 @@ public class Player : MonoBehaviour
     public void SetTriggerSize(float rate)
     {
         if(getTrigger != null)
+        {
             getTrigger.radius = rate * getTriggerRadius;
+            if(magnetLights != null)
+            {
+                foreach(ParticleSystem n in magnetLights)
+                    n.Stop();
+            }
+        }
     }
 
     public void SetActionState(int right)
@@ -339,7 +378,7 @@ public class Player : MonoBehaviour
                 eventPowerMax();
             if(lastPower == POWER_MAX)  //原本就满了
                 return;
-            if(state != STATE.SlowDown)
+            if(state != STATE.SlowDown  && !IsSuper())
             {
                 state = STATE.PowerUp;
                 stateTime_last = Time.time;
@@ -357,6 +396,28 @@ public class Player : MonoBehaviour
         god = true;
         state = STATE.None;
         stateTime_last = Time.time;
+    }
+
+    public void OnSuperLight()
+    {
+        //无敌加速特效
+        if(superLight_out != null)
+            superLight_out.Play();
+        if(superLights_in != null)
+        {
+            foreach(ParticleSystem n in superLights_in)
+                n.Play();
+        }
+    }
+
+    public void OnMagnetLight()
+    {
+        //磁铁特效
+        if(magnetLights != null)
+        {
+            foreach(ParticleSystem n in magnetLights)
+                n.Play();
+        }
     }
 
     public void ResetAnimator_BeAttack()

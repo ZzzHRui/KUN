@@ -15,7 +15,7 @@ public class Skill_Magnet : SkillBase
     {
         Game.instance.playerScript.SetTriggerSize(3.0f);  //放大为三倍
         //特效相关设置
-
+        Game.instance.playerScript.OnMagnetLight();
         base.BeginSkill();
     }
 
