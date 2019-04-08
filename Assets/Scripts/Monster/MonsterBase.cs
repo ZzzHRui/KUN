@@ -38,7 +38,15 @@ public class MonsterBase : MonoBehaviour
     protected void OnTriggerEnter2D(Collider2D other) {
         if(other.tag != "Player" || hasCollide)
             return;
-        Game.instance.playerScript.BeAttacked(attack);
+        if(Game.instance.playerScript.BeAttacked(attack))  //有效撞击才会出特效
+        {
+            //撞击特效
+            Vector3 pos = (gameObject.transform.position + other.transform.position) / 2.0f;
+            if(Game.instance.pre_beAttackLight != null)
+            {
+                GameObject.Instantiate(Game.instance.pre_beAttackLight, pos, Quaternion.identity);
+            }
+        }
         hasCollide = true;
         //如果player处于无敌加速状态，则怪物会进入被撞飞状态
         if(Game.instance.playerScript.IsSuper())

@@ -26,6 +26,7 @@ public class Game
     public GameObject[] backgrounds = null;
     public GameObject[] foregrounds = null;
     public RectTransform screenRect;
+    public GameObject pre_beAttackLight = null;  //攻击光效
 
     private int score;  //分数
     public int Score { get => score; set => score = value; }

@@ -23,6 +23,7 @@ public class GameController : MonoBehaviour
         Game.instance.screenRect = canvas.GetComponent<RectTransform>();
         Game.instance.monsterSetter = gameObject.GetComponent<MonsterSetter>();
         Game.instance.skillButton = canvas.transform.Find("Panel/InputController/PowerUp").GetComponent<Button_Skill>();
+        Game.instance.pre_beAttackLight = (GameObject)Resources.Load("Prefabs/Light/BeAttackLight");
         Initilize();
     }
 
@@ -52,7 +53,7 @@ public class GameController : MonoBehaviour
     public void InitilizeAll()
     {
         Initilize();
-        Game.instance.player.SetActive(true);
+        // Game.instance.player.SetActive(true);
         //调用其它的Controller和Setter的Initialize
         Game.instance.playerScript.Initialize();
         Game.instance.monsterSetter.Initialize();

@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: beAttackLight
+  m_Name: inputLight
   m_Shader: {fileID: 4800000, guid: fdce3ebcbf69f9441819397f699fe039, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -40,7 +40,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: fe9b12de86311344aa4ee87844216eeb, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2f7193b9f53cf7f43a202b2e0a289e8e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:

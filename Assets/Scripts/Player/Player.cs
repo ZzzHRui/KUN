@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     float SPEED_SLOWDOWN_ADD;
     float SPEED_UP_ADD;
     int POWER_MAX = 200;
+    GameObject sprites = null;
     //属性
     float speed_up = 8.0f;
     float maxSpeed_hor = 10.0f;
@@ -32,6 +33,7 @@ public class Player : MonoBehaviour
     bool god = false;  //无敌
     bool usingSkill = false;
     CircleCollider2D getTrigger = null;
+    Collider2D attackCollider = null;
     float getTriggerRadius = 0.8f;
     GameObject protectPopo = null;
     ParticleSystem superLight_out = null;  //加速雨效果
@@ -40,6 +42,10 @@ public class Player : MonoBehaviour
 
     //动画相关
     Animator animator;
+
+    //动作变量
+    Vector3 deltaPos = Vector3.zero;
+    Vector2 nowForce = Vector2.zero;
 
     enum STATE
     {
@@ -78,8 +84,10 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        sprites = gameObject.transform.Find("sprite").gameObject;
         rigid = gameObject.GetComponent<Rigidbody2D>();
         getTrigger = gameObject.transform.Find("GetTrigger").GetComponent<CircleCollider2D>();
+        attackCollider = gameObject.GetComponent<Collider2D>();
         protectPopo = gameObject.transform.Find("sprite/body/protect").gameObject;
         animator = gameObject.GetComponent<Animator>();
         GameObject temp = Camera.main.transform.Find("superLight").gameObject;
@@ -104,8 +112,9 @@ public class Player : MonoBehaviour
 
     public void Initialize()
     {
+        sprites.SetActive(true);
         gameObject.transform.position = new Vector3(0.0f, 3.4f, 0.0f);
-        gameObject.GetComponent<Collider2D>().enabled = true;
+        attackCollider.enabled = true;
         getTrigger.enabled = true;
         getTrigger.radius = getTriggerRadius;
         SPEED_UP_NORMAL = Game.instance.speed_up_player;
@@ -126,8 +135,6 @@ public class Player : MonoBehaviour
         usingSkill = false;
         if(protectPopo != null)
             protectPopo.SetActive(false);
-        if(animator != null)
-            animator.SetBool("BeAttack", false);
         if(superLight_out != null)
             superLight_out.Stop();
         if(superLights_in != null)
@@ -205,7 +212,8 @@ public class Player : MonoBehaviour
                 break;
             
             case STATE.End:
-                gameObject.SetActive(false);
+                // gameObject.SetActive(false);
+                sprites.SetActive(false);
                 PanelMgr.instance.OpenPanel<OverPanel>("");
                 break;
         }
@@ -215,7 +223,7 @@ public class Player : MonoBehaviour
     {
         //改变y值
         float y = this.speed_up * Time.deltaTime;
-        Vector3 deltaPos =  new Vector3(0, y, 0);
+        deltaPos.y = y;
         gameObject.transform.position += deltaPos;
         //横向施力
         float force = 0.0f;
@@ -264,27 +272,27 @@ public class Player : MonoBehaviour
 
         if (force != 0.0f)
         {
-            Vector2 tempForce = new Vector2(force, 0);
-            rigid.AddForce(tempForce, ForceMode2D.Impulse);
+            nowForce.x = force;
+            rigid.AddForce(nowForce, ForceMode2D.Impulse);
         }
 
         gameObject.transform.rotation = Quaternion.Euler(0.0f, 0.0f, -action * 30.0f);
     }
 
     //被敌对势力攻击
-    public void BeAttacked(int attack)
+    public bool BeAttacked(int attack)
     {
         if(god || isProtecting)
-            return;
+            return false;
         if(portected)
         {
             portected = false;
             protectPopo.SetActive(false);
-            return;
+            return false;
         }
         
         Power -= attack;
-        animator.SetBool("BeAttack", true);
+        animator.SetTrigger("BeAttack");
         state = STATE.Hurt;
         stateTime_last = Time.time;
         eventBeAttack();
@@ -294,10 +302,14 @@ public class Player : MonoBehaviour
             state = STATE.Dying;
             stateTime_last = Time.time;
             getTrigger.enabled = false;
+            attackCollider.enabled = false;
+            animator.SetTrigger("Dead");
             eventDead();
         }
         isProtecting = true;  //死亡后也一直保持保护状态不会再度受伤
         //通知刷新power的UI，分数实时刷新即可
+
+        return true;
     }
 
     //受到陷阱伤害，至少会保留1点能量
@@ -418,11 +430,6 @@ public class Player : MonoBehaviour
             foreach(ParticleSystem n in magnetLights)
                 n.Play();
         }
-    }
-
-    public void ResetAnimator_BeAttack()
-    {
-        animator.SetBool("BeAttack", false);
     }
 
     public bool IsSuper()
