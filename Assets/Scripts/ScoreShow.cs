@@ -15,8 +15,6 @@ public class ScoreShow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        string temp = ",";
-        temp += Game.instance.playerScript.Power;
-        text.text = Game.instance.Score.ToString() + temp;
+        text.text = Game.instance.Score.ToString();
     }
 }

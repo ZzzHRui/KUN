@@ -9,7 +9,6 @@ public class InputLight : MonoBehaviour
     Vector3 viewPos = Vector3.zero;
     int maxX  = 1080;
     int maxY = 1920;
-    bool touching = false;
     
     // Start is called before the first frame update
     void Start()

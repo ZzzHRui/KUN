@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     float SPEED_UP_MAX;
     float SPEED_SLOWDOWN_ADD;
     float SPEED_UP_ADD;
-    int POWER_MAX = 200;
+    int POWER_MAX;
     GameObject sprites = null;
     //属性
     float speed_up = 8.0f;
@@ -113,10 +113,11 @@ public class Player : MonoBehaviour
     public void Initialize()
     {
         sprites.SetActive(true);
-        gameObject.transform.position = new Vector3(0.0f, 3.4f, 0.0f);
+        gameObject.transform.position = new Vector3(0.0f, Game.instance.offset_camera, 0.0f);
         attackCollider.enabled = true;
         getTrigger.enabled = true;
         getTrigger.radius = getTriggerRadius;
+        POWER_MAX = Game.instance.maxPower;
         SPEED_UP_NORMAL = Game.instance.speed_up_player;
         SPEED_UP_MAX = SPEED_UP_NORMAL * Game.instance.speed_max_rate;
         SPEED_SLOWDOWN_ADD = (-SPEED_UP_MAX + SPEED_UP_NORMAL) / Game.instance.time_speed_slowdown;
@@ -225,6 +226,8 @@ public class Player : MonoBehaviour
         float y = this.speed_up * Time.deltaTime;
         deltaPos.y = y;
         gameObject.transform.position += deltaPos;
+        if(state >= STATE.Dying)  //死亡后不再可操作
+            return;
         //横向施力
         float force = 0.0f;
         if(Input.GetKey(KeyCode.LeftArrow))
@@ -303,6 +306,7 @@ public class Player : MonoBehaviour
             stateTime_last = Time.time;
             getTrigger.enabled = false;
             attackCollider.enabled = false;
+            action = 0;
             animator.SetTrigger("Dead");
             eventDead();
         }
@@ -372,6 +376,8 @@ public class Player : MonoBehaviour
 
     public void SetActionState(int right)
     {
+        if(action == right)
+            return;
         /*设置运动方向*/
         if(right < -1 || right > 1)
             return;

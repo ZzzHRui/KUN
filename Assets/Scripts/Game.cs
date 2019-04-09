@@ -40,16 +40,17 @@ public class Game
     public float speed_down_foreground;
 
     //摄像机
-    public float offset_camera = 3.4f;  //摄像机和player的偏移距离
+    public float offset_camera = 3.0f;  //摄像机和player的偏移距离
 
     //能量
     public float offset_setPower;  //生成power的player的移动距离
     public int[] power = {1, 2, 4};  //能量值
     public int[] baseScore = {1, 2, 3};  //能量的基础分值，分值为 baseScore * multiScore * level
     public int multiScore = 7;
+    public int maxPower = 200;
 
     //怪物
-    public int[] attack = {30, 30, 80, 30};  //每种怪物的攻击力，攻击力分别是0123的
+    public int[] attack = {50, 50, 100, 50};  //每种怪物的攻击力，攻击力分别是0123的
     public int[][] monsterLevel = {  //每组（每个难度）的每个元素为对应种类怪物出现的概率
         new int[]{4, 4, 5, 5},  //总长度为最后一个元素的值，i种类占用的长度为 int[i] - int[i - 1]，本行种类0:2 = 4:1
         new int[]{5, 8, 10, 10},
