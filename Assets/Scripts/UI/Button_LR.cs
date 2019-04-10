@@ -17,9 +17,9 @@ public class Button_LR : MonoBehaviour
         if(Input.touchCount == 1)  //有触摸
         {
             viewPos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-            if(viewPos.x >= 0.55f)
+            if(viewPos.x >= 0.6f)
                 Game.instance.playerScript.SetActionState(1);
-            else if(viewPos.x <= 0.45f)
+            else if(viewPos.x <= 0.4f)
                 Game.instance.playerScript.SetActionState(-1);
         }
         else

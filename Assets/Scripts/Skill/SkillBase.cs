@@ -38,6 +38,7 @@ public class SkillBase : MonoBehaviour
     {
         gameObject.GetComponent<Collider2D>().enabled = false;
         gameObject.transform.position = Vector3.zero;
+        MyAudio.instance.PlayGetSkill();
 	}
 
     public void DestoryGameObject()

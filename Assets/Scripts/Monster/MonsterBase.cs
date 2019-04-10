@@ -46,6 +46,7 @@ public class MonsterBase : MonoBehaviour
             {
                 GameObject.Instantiate(Game.instance.pre_beAttackLight, pos, Quaternion.identity);
             }
+            MyAudio.instance.PlayBeAttack();
         }
         hasCollide = true;
         //如果player处于无敌加速状态，则怪物会进入被撞飞状态
@@ -58,6 +59,7 @@ public class MonsterBase : MonoBehaviour
                 speed_X = (float)(Random.Range(-5, 0));
             else
                 speed_X = (float)(Random.Range(1, 6));
+            MyAudio.instance.PlayBeAttack();
         }
     }
 

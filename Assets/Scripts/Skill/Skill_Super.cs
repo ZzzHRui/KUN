@@ -21,6 +21,8 @@ public class Skill_Super : SkillBase
 
     new void BeginSkill()
     {
+        MyAudio.instance.PlaySpeedUp();
+        MyAudio.instance.SetPitch(1.1f);
         Game.instance.playerScript.OnSkill_Super(isPlayerSkill);
         //特效相关设置
         Game.instance.playerScript.OnSuperLight();
@@ -31,6 +33,7 @@ public class Skill_Super : SkillBase
     {
         Player player = Game.instance.playerScript;
         player.IntoState_None();
+        MyAudio.instance.SetPitch(1.0f);
         base.OverSkill();
     }
 

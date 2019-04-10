@@ -88,6 +88,8 @@ public class Power : MonoBehaviour
             beginTime = Time.time;
             nowMode = MODE.Begin;
             gameObject.GetComponent<Collider2D>().enabled = false;
+
+            MyAudio.instance.PlayGetPower();
         }
 	}
 

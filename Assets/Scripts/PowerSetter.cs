@@ -211,6 +211,7 @@ public class PowerSetter : MonoBehaviour
     void OnPlayerDead()
     {
         active = false;
+        this.setMap.Dispose();
     }
 
     //给setMap增加一行，并设置生成的x

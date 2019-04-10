@@ -40,13 +40,17 @@ public class GameController : MonoBehaviour
     void Initilize()
     {
         StopAllCoroutines();
+        MyAudio.instance.SetPitch(1.0f);
         Game.instance.Score = 0;
+        Game.instance.beginTime = Time.time;
         Game.instance.Level = LEVEL.Level1;
         Game.instance.speed_down_background = 6.0f;
         Game.instance.speed_down_foreground = 4.0f;
         Game.instance.offset_setPower = 1.0f;
         Game.instance.offset_setMonster = 10.0f;
         Game.instance.offset_setSkill = 120.0f;
+        MyAudio.instance.SetBGM("Main");
+        MyAudio.instance.PlayBGM();
         Invoke("OnLevelUp", 32.0f);
     }
 

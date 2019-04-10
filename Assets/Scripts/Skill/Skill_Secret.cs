@@ -11,6 +11,8 @@ public class Skill_Secret : SkillBase
     int setPowerNum_per = 5;
     int redussPower = 25;
     int goodRate = 6;
+    ParticleSystem goodLight = null;
+    ParticleSystem badLight = null;
 
     GameObject pre_power = null;
     new void Start()
@@ -20,6 +22,8 @@ public class Skill_Secret : SkillBase
         pre_power = Game.instance.powerSetter.GetPrePower();
         keepTime = 2.0f;
         id = 3;
+        goodLight = gameObject.transform.Find("Secreat_good").GetComponent<ParticleSystem>();
+        badLight = gameObject.transform.Find("Secreat_bad").GetComponent<ParticleSystem>();
     }
 
     // Update is called once per frame
@@ -37,11 +41,13 @@ public class Skill_Secret : SkillBase
         {
             InvokeRepeating("SetPower", 0.02f, 0.02f);  //0.1秒后才出现能量
             //特效
+            goodLight.Play();
         }
         else
         {
             Game.instance.playerScript.BeHurted(redussPower);
             //特效
+            badLight.Play();
         }
     }
 

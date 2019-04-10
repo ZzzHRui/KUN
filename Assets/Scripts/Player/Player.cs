@@ -414,6 +414,7 @@ public class Player : MonoBehaviour
         god = true;
         state = STATE.None;
         stateTime_last = Time.time;
+        MyAudio.instance.PlaySpeedUp();
     }
 
     public void OnSuperLight()

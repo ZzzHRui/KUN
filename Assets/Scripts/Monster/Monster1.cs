@@ -5,7 +5,7 @@ using UnityEngine;
 /*小体蛇皮走位怪物 */
 public class Monster1 : MonsterBase
 {
-    float speed_horizontal = 6.0f;  //横向移动速度
+    float speed_horizontal = 4.0f;  //横向移动速度
     float left = -2.6f;
     float right = 2.6f;
     float targetX;
