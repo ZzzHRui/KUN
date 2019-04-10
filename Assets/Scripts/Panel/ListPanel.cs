@@ -126,10 +126,10 @@ public class ListPanel : PanelBase
         string s = "";
         for(int i = 0; i < saveData.data.Count; i++)
         {
-            str.AppendFormat("{0, -10}", "第" + (i + 1).ToString() + "名");
-            str.AppendFormat("{0, -10}", saveData.data[i].score.ToString());
+            str.AppendFormat("{0, -9}", "第" + (i + 1).ToString() + "名");
+            str.AppendFormat("{0, -9}", saveData.data[i].score.ToString());
             s = string.Format("{0:F2}", saveData.data[i].time);
-            str.AppendFormat("{0, -10}", s + "s");
+            str.AppendFormat("{0, 9}", s + "s");
             str.Append("\n");
         }
         listText.text = str.ToString();

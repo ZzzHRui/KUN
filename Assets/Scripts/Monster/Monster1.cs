@@ -19,7 +19,7 @@ public class Monster1 : MonsterBase
         toRight = Random.Range(0, 2) == 1 ? true : false;
         SetDirection(toRight);
         speed_down = speed_down_min - 1.0f;
-        base.Start();
+        Invoke("DestroyGameObject", 20.0f);  //防止怪物意外不清除
     }
 
     // Update is called once per frame

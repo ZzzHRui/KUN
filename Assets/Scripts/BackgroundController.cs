@@ -13,7 +13,7 @@ public class BackgroundController : MonoBehaviour
     STATE nowState = STATE.Normal;
     Vector3 deltaPos = Vector3.zero;
     GameObject[] backgrounds;
-    public float offset_rate = 0.03f;
+    public float offset_rate = 0.07f;
 
     enum STATE
     {

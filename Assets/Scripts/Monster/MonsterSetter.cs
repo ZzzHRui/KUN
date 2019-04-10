@@ -207,7 +207,7 @@ public class MonsterSetter : MonoBehaviour
                 break;
 
             case SP_MODE.Mode2:
-                Game.instance.offset_setMonster = Game.instance.speed_up_player / 1.5f;
+                Game.instance.offset_setMonster = Game.instance.speed_up_player / 1.0f;
                 sp_monsterIdx = 1;
                 h = 10;
                 w = 2;

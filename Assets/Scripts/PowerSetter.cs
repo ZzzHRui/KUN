@@ -20,7 +20,7 @@ public class PowerSetter : MonoBehaviour
     float offset_setPower_distance = 0.5f;  //用于生成本波能量的间距
     float offset_setPower_last = 0.0f;   //用于记录上一次生成的距离
 
-    float offset_setPower_min = 7.0f;
+    float offset_setPower_min = 6.0f;
     int offset_setPower_minQuantum = 0;  //用于随机生成下一次的offset_setPower，int类型减少开销
     int offset_setPower_maxQuantum = 6;
     float offset_setPower_perQuantum = 1f;  //每个单位的间隔距离
