@@ -79,7 +79,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\u300AKUN\u300B\u662F\u4E00\u6B3E\u7B80\u5355\u7684\u654F\u6377\u8EB2\u907F\u5C0F\u6E38\u620F\u3002\u6361\u53D6\u80FD\u91CF\u83B7\u5F97\u66F4\u9AD8\u5206\u6570\u5427\uFF01\n\n\n
-    \               \u4F5C\u8005\uFF1A\u54B8\u9C7C\u5C0F\u9510"
+    \               \u7248\u672C\uFF1AV1.0\n\t\t\t\t\u4F5C\u8005\uFF1A\u54B8\u9C7C\u5C0F\u9510"
 --- !u!1 &2909109365459441420
 GameObject:
   m_ObjectHideFlags: 0

@@ -20,7 +20,7 @@ public class PowerSetter : MonoBehaviour
     float offset_setPower_distance = 0.5f;  //用于生成本波能量的间距
     float offset_setPower_last = 0.0f;   //用于记录上一次生成的距离
 
-    float offset_setPower_min = 6.0f;
+    float offset_setPower_min = 4.5f;
     int offset_setPower_minQuantum = 0;  //用于随机生成下一次的offset_setPower，int类型减少开销
     int offset_setPower_maxQuantum = 6;
     float offset_setPower_perQuantum = 1f;  //每个单位的间隔距离
@@ -70,12 +70,12 @@ public class PowerSetter : MonoBehaviour
 
     public void Initialize()
     {
-        active = true;
+        setMap.Dispose();
+        // active = true;
         sp_time_last = Time.time;
         offset_setPower_distance = OFFSET_DISTANCE_NORMAL;
         offset_setPower_last = 0.0f;
         sp_time_delay = 30.0f;
-        setMap.Dispose();
     }
 
     // Update is called once per frame
@@ -104,11 +104,13 @@ public class PowerSetter : MonoBehaviour
                     //生成下一次的间距
                     Game.instance.offset_setPower = (float)UnityEngine.Random.Range(offset_setPower_minQuantum, offset_setPower_maxQuantum) 
                                             * offset_setPower_perQuantum + offset_setPower_min;
+                    Game.instance.playerScript.SetPowerY_Last();
                     if(Game.instance.Level >= LEVEL.Level3)
                         Game.instance.offset_setPower /= 1.5f;
                     nowMode = MODE.None;
                     setMap.Dispose();
                     offset_setPower_distance = OFFSET_DISTANCE_NORMAL;
+                    active = false;
                 }
                 offset_setPower_last = nowY;
             }
@@ -117,6 +119,7 @@ public class PowerSetter : MonoBehaviour
 
     void OnSetPower()
     {
+        active = true;
         //生成模式
         bool is_sp_time = Time.time - sp_time_last >= sp_time_delay;
         if(is_sp_time)
@@ -203,7 +206,10 @@ public class PowerSetter : MonoBehaviour
         }
         this.setMap = setMap.GetEnumerator();
         if(!this.setMap.MoveNext())
+        {
             this.setMap.Dispose();
+            active = false;
+        }
         Game.instance.offset_setPower = float.MaxValue;
         
     }

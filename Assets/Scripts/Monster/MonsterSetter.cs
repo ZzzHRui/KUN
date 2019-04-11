@@ -74,12 +74,6 @@ public class MonsterSetter : MonoBehaviour
         setMap.Dispose();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     void OnSetMonster()
     {
         if(isSp)
@@ -182,17 +176,17 @@ public class MonsterSetter : MonoBehaviour
         {
             case SP_MODE.Mode1:
                 Game.instance.offset_setMonster = Game.instance.speed_up_player / 1.0f;
-                int secureNum = 2;  //保留2个空的作为出口
+                int secureNum = 3;  //保留3个空的作为出口
                 sp_monsterIdx = 3;
                 h = 10;
                 w = setPointNum - secureNum;
                 index = new int[w];
-                int next = 2;
+                int next = 2;  //每次的缺口位置偏移2格
                 beginX = Random.Range(secureNum, setPointNum + 1);
                 for(int i = 0; i < h; i++)
                 {
                     int now = beginX + next;
-                    if(now >= setPointNum || now < 2)
+                    if(now >= setPointNum || now < secureNum)
                     {
                         next *= -1;
                         now = beginX + next;

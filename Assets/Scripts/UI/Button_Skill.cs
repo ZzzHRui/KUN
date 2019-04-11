@@ -23,6 +23,7 @@ public class Button_Skill : MonoBehaviour, IPointerDownHandler
         image = gameObject.GetComponent<Image>();
         Game.instance.playerScript.eventPowerMax += OnPowerMax;
         Game.instance.playerScript.eventBeAttack += OnPowerDown;
+        Game.instance.playerScript.eventBeHurted += OnPowerDown;
         Initialize();
     }
 

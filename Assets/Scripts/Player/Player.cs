@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     GameObject sprites = null;
     //属性
     float speed_up = 8.0f;
-    float maxSpeed_hor = 10.0f;
+    float maxSpeed_hor = 8.0f;
     float lastPos_Y_setPower = 0.0f;
     float lastPos_Y_setMonster = 0.0f;
     float lastPos_Y_setSkill = 0.0f;
@@ -66,6 +66,7 @@ public class Player : MonoBehaviour
     public event Handler eventSpeedMax;  //进入加速状态
     public event Handler eventSpeedSlow;  //进入减速状态
     public event Handler eventPowerMax;  //能量满了
+    public event Handler eventBeHurted;  //意外受伤
     public event Handler eventBeAttack;  //被攻击，也意味着能量有降低
 
     public int Power { 
@@ -158,7 +159,7 @@ public class Player : MonoBehaviour
         if(nowY - lastPos_Y_setPower >= Game.instance.offset_setPower)
         {
             eventSetPower();
-            lastPos_Y_setPower = nowY;
+            lastPos_Y_setPower = float.MaxValue;
         }
         //生成monster检查
         if(nowY - lastPos_Y_setMonster >= Game.instance.offset_setMonster)
@@ -320,6 +321,7 @@ public class Player : MonoBehaviour
     public void BeHurted(int hurted)
     {
         Power -= hurted;
+        eventBeHurted();
         //判断是否低于1
         if(Power < 1)
             Power = 1;
@@ -333,7 +335,7 @@ public class Player : MonoBehaviour
 
     public void IntoState_None()
     {
-        if(usingSkill)  
+        if(usingSkill)
             BeHurted(150);  //技能结束后扣除150能量
         usingSkill = false;
         if(speed_up > SPEED_UP_NORMAL)
@@ -446,5 +448,10 @@ public class Player : MonoBehaviour
             return true;
         else
             return false;
+    }
+
+    public void SetPowerY_Last()
+    {
+        lastPos_Y_setPower = gameObject.transform.position.y;
     }
 }

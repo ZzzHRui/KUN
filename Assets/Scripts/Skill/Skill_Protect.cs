@@ -11,12 +11,6 @@ public class Skill_Protect : SkillBase
         id = 2;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     new void BeginSkill()
     {
         Player player = Game.instance.playerScript;

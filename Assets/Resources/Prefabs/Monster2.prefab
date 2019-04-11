@@ -389,6 +389,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cdff3fec211041488bfe6348170d50e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed_down: 0
 --- !u!95 &3569412247568851230
 Animator:
   serializedVersion: 3
@@ -422,7 +423,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0, y: 0}
-  m_Size: {x: 2.1984189, y: 1.0000001}
+  m_Size: {x: 1.9478142, y: 1.0000001}
   m_Direction: 1
 --- !u!1 &8285099927807480838
 GameObject:

@@ -6,10 +6,17 @@ public class SkillBase : MonoBehaviour
 {
     protected int id = -1;
     protected float keepTime = 0.0f;
+    Vector3 deltaPos = Vector3.zero;
 
     protected void Start()
     {
         Invoke("DestoryGameObject", 20.0f);  //用于清除没被捡到的
+    }
+
+    protected void Update()
+    {
+        deltaPos.y = 0.5f * Time.deltaTime;
+        gameObject.transform.position += deltaPos;
     }
 
     protected void BeginSkill()

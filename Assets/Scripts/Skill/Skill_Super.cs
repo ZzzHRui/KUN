@@ -14,13 +14,9 @@ public class Skill_Super : SkillBase
         id = 1;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
     new void BeginSkill()
     {
+        Game.instance.playerScript.IntoState_None();
         MyAudio.instance.PlaySpeedUp();
         MyAudio.instance.SetPitch(1.3f);
         Game.instance.playerScript.OnSkill_Super(isPlayerSkill);
@@ -31,8 +27,7 @@ public class Skill_Super : SkillBase
 
     new void OverSkill()
     {
-        Player player = Game.instance.playerScript;
-        player.IntoState_None();
+        Game.instance.playerScript.IntoState_None();
         MyAudio.instance.SetPitch(1.0f);
         base.OverSkill();
     }

@@ -26,12 +26,6 @@ public class Skill_Secret : SkillBase
         badLight = gameObject.transform.Find("Secreat_bad").GetComponent<ParticleSystem>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     new void BeginSkill()
     {
         //生成大量的能量
