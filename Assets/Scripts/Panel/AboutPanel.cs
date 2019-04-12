@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class AboutPanel : PanelBase
 {
     public Button closeBtn;
+    public Button urlBtn;
     RectTransform rect = null;
     Vector3 scale = Vector3.one;
     STATE state;
@@ -22,6 +23,8 @@ public class AboutPanel : PanelBase
     {
         closeBtn = skin.transform.Find("CloseBtn").GetComponent<Button>();
         closeBtn.onClick.AddListener(OnButtonClick_Close);
+        urlBtn = skin.transform.Find("UrlBtn").GetComponent<Button>();
+        urlBtn.onClick.AddListener(OnButtonClick_Url);
         rect = skin.GetComponent<RectTransform>();
         scale.y = 0.1f;
         rect.localScale = scale;
@@ -73,5 +76,10 @@ public class AboutPanel : PanelBase
     {
         state = STATE.Close;
         MyAudio.instance.PlayClickBtn();
+    }
+
+    public void OnButtonClick_Url()
+    {
+        Application.OpenURL("https://www.wjx.cn/jq/37568677.aspx");
     }
 }

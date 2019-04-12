@@ -7,6 +7,7 @@ public class SkillBase : MonoBehaviour
     protected int id = -1;
     protected float keepTime = 0.0f;
     Vector3 deltaPos = Vector3.zero;
+    bool hasUsed = false;
 
     protected void Start()
     {
@@ -15,6 +16,8 @@ public class SkillBase : MonoBehaviour
 
     protected void Update()
     {
+        if(hasUsed)
+            return;
         deltaPos.y = 0.5f * Time.deltaTime;
         gameObject.transform.position += deltaPos;
     }

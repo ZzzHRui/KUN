@@ -10,6 +10,7 @@ public class OverPanel : PanelBase
 {
     public Button restartBtn;
     public Button backBtn;
+    public Button urlBtn;
     public Text score;
     public Text tips;
 
@@ -50,6 +51,9 @@ public class OverPanel : PanelBase
 
         tips = skin.transform.Find("Tips").GetComponent<Text>();
         tips.text = "";
+
+        urlBtn = skin.transform.Find("UrlBtn").GetComponent<Button>();
+        urlBtn.onClick.AddListener(OnButtonClick_Url);
 
         //记录分数和用时
         nowScore = Game.instance.Score;
@@ -201,5 +205,10 @@ public class OverPanel : PanelBase
                 f.Close();
             }
         }
+    }
+
+    public void OnButtonClick_Url()
+    {
+        Application.OpenURL("https://www.wjx.cn/jq/37568677.aspx");
     }
 }
