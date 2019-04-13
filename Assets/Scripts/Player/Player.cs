@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     GameObject sprites = null;
     //属性
     float speed_up = 8.0f;
-    float maxSpeed_hor = 8.0f;
+    float maxSpeed_hor = 6.5f;
     float lastPos_Y_setPower = 0.0f;
     float lastPos_Y_setMonster = 0.0f;
     float lastPos_Y_setSkill = 0.0f;

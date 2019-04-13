@@ -8,7 +8,8 @@ public class GameController : MonoBehaviour
     public event Handler eventLevelUp;  //提高难度
     void Awake()
     {
-        Game.instance = new Game();
+        if(Game.instance == null)
+            Game.instance = new Game();
         Game.instance.gameController = this;
         Game.instance.player = GameObject.FindGameObjectWithTag("Player");
         Game.instance.playerScript = Game.instance.player.GetComponent<Player>();

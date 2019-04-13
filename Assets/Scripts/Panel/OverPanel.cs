@@ -5,6 +5,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Net;
+using System.Net.Sockets;
 
 public class OverPanel : PanelBase
 {
@@ -16,6 +18,7 @@ public class OverPanel : PanelBase
 
     int nowScore;  //本局分数
     float nowTime; //本局用时
+    string[] sp = null;
     Save saveData;
     string fileNam = "/save.dt";
     BinaryFormatter bf = new BinaryFormatter();
@@ -79,6 +82,7 @@ public class OverPanel : PanelBase
                 {
                     scale.y = 1.0f;
                     state = STATE.None;
+                    GetUserInfo();
                     ShowScoreAndTips();
                 }
                 break;
@@ -121,33 +125,35 @@ public class OverPanel : PanelBase
 
     public void ShowScoreAndTips()
     {
-        string str = "得分：" + nowScore.ToString();
-        str += "\n坚持时间：" + nowTime.ToString() + "s";
-        score.text = str;
-        if(saveData == null)  //不存在该文件，为第一名
+        string str = "本次得分：" + nowScore.ToString();
+        int number;
+        int count;
+        if(sp != null)
         {
-            tips.text = "破纪录啦！获得第1名！";
-            saveData = new Save();
-            saveData.Insert(nowScore, nowTime);
-            Debug.LogError("unexit");
+            number = int.Parse(sp[1]);
+            count = int.Parse(sp[2]);
+            if(sp[0] == "1")  //刷新记录
+            {
+                str += "\n排名刷新：第" + sp[1] + "名";
+                str += "\n超过了" + string.Format("{0:F1}", ((count - number) / count)) + "% 的玩家";
+                tips.text = "恭喜！刷新了记录！";
+            }
+            else if(sp[0] == "0")  //没刷新记录
+            {
+                str += "\n本次排名不变：第" + sp[1] + "名";
+                str += "\n超过了" + string.Format("{0:F1}", ((float)(count - number) * 100.0f / (float)count)) + "% 的玩家";
+                if(number <= 10)
+                    tips.text = string.Format("恭喜您继续保持第{0}名的记录！", number);
+                else
+                    tips.text = string.Format("加油！差一点就上榜了，还差{0}分", saveData.data[saveData.data.Count - 1].score - nowScore);
+            }
         }
         else
         {
-            int i = saveData.Insert(nowScore, nowTime);
-            if(i == -1)  //没上榜
-            {
-                tips.text = "差一点就刷新记录了，加油！";
-            }
-            else if (i == 1)
-            {
-                tips.text = "恭喜！破记录啦！获得第1名!";
-                //触发特效?
-            }
-            else
-            {
-                tips.text = "刷新榜单啦！获得第" + i.ToString() + "名!\n距离前一名只差" + (saveData.data[i - 2].score - nowScore).ToString() + "分啦！";
-            }
+            str += "\n历史最高得分：" + saveData.maxScore;
         }
+        score.text = str;
+        //
         SaveSaveFile();
     }
 
@@ -192,6 +198,10 @@ public class OverPanel : PanelBase
             {
                 f = File.Open(Application.persistentDataPath + fileNam, FileMode.Open);
                 saveData = (Save)bf.Deserialize(f);
+                if(nowScore > saveData.maxScore)
+                {
+                    saveData.maxScore = nowScore;  // 更新自身的最高分数
+                }
             }
             catch(IOException)
             {
@@ -204,6 +214,35 @@ public class OverPanel : PanelBase
             {
                 f.Close();
             }
+        }
+    }
+
+    void GetUserInfo()
+    {
+        //更新服务器的分数
+        if(saveData.username != "" && saveData.username != null)
+        {
+            IPAddress ip = IPAddress.Parse(Game.instance.HOST);
+            Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 500);
+            byte[] result = new byte[1024];
+            int bytes = 0;
+            try
+            {
+                sock.Connect(new IPEndPoint(ip, Game.instance.PORT));
+                sock.Send(System.Text.Encoding.Default.GetBytes("USER " + saveData.username + " " + nowScore.ToString()));
+                bytes = sock.Receive(result);
+            }
+            catch
+            {
+                PanelMgr.instance.OpenPanel<TipsPanel>("", "服务器异常");
+            }
+            if(bytes != 0)
+            {
+                string str = System.Text.Encoding.Default.GetString (result);
+                sp = str.Split(" ".ToCharArray()[0]);  //得到0/1 , 排名， 总用户数
+            }
+            sock.Close();
         }
     }
 

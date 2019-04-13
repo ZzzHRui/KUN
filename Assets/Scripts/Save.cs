@@ -7,6 +7,8 @@ public class Save
 {
     /*保存的数据 */
     public List<SaveData> data = new List<SaveData>();
+    public string username = "";  //本用户名
+    public int maxScore = 0;
     
     public void Sort()
     {
@@ -14,50 +16,26 @@ public class Save
         data.Sort(s);
     }
 
-    public int Insert(int s, float t)
+    public void SetList(string list)
     {
-        SaveData now;
-        now.score = s;
-        now.time = t;
-        if(data.Count < 6)  //还没满的，直接插入然后排序
+        data.Clear();
+        string[] allList = list.Split(" ".ToCharArray()[0]);
+        SaveData tempData;
+        for(int i = 0; i < allList.Length; i += 2)
         {
-            int i = 1;
-            foreach(SaveData n in data)
-            {
-                if(now.score > n.score)
-                {
-                    break;
-                }
-                i++;
-            }
-            data.Add(now);
-            if(data.Count >= 2)
-            {
-                Sort();
-            }
-            return i;
+            if(allList[i].Contains("\0"))
+                break;
+            tempData.username = allList[i];
+            tempData.score = (int)float.Parse(allList[i + 1]);
+            data.Add(tempData);
         }
-        /*已经排好序，如果长度超过6则删除末尾，返回本次的名次 */
-        for(int i = 0; i < data.Count - 1; i++)
-        {
-            if(now.score > data[i].score)
-            {
-                data.Insert(i, now);
-                if(data.Count > 6)
-                {
-                    data.RemoveRange(6, data.Count - 6);  //删除之后所有
-                }
-                return i + 1;
-            }
-            //当相同分数则考虑用时，待写
-        }
-        return -1;  //没上榜
+        
     }
 }
 
 [System.Serializable]
 public struct SaveData
 {
-    public int score;
-    public float time;
+    public string username;  //用户名
+    public int score;  //分数
 }

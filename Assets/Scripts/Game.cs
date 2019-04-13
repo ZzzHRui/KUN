@@ -14,6 +14,10 @@ public class Game
 {
     public static Game instance;  //单例
 
+    //服务器相关
+    public string HOST = "129.204.150.195";
+    public int PORT = 2971;
+
     public GameController gameController = null;
     public BackgroundController backgroundController = null;
     public ForegroundController foregroundController = null;

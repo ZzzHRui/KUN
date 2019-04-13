@@ -5,10 +5,10 @@ using UnityEngine;
 /*小体积的竖直加速*/
 public class Monster3 : MonsterBase
 {
-    float speed_add1 = 0.8f;
-    float speed_add2 = 20.0f;
+    float speed_add1 = 0.01f;
+    float speed_add2 = 15.0f;
     float beginTime = float.MaxValue;
-    float speedUpTime = 0.6f;
+    float speedUpTime = 1.0f;
     // Start is called before the first frame update
     new void Start()
     {

@@ -8,8 +8,6 @@ public class Sort : IComparer<SaveData>
     {
         int n;
         n = x.score.CompareTo(y.score);
-        if(n == 0)
-            n = y.time.CompareTo(x.time);
         return -n;
     }
 }
