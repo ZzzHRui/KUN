@@ -8,11 +8,13 @@ public class Player : MonoBehaviour
     float SPEED_UP_MAX;
     float SPEED_SLOWDOWN_ADD;
     float SPEED_UP_ADD;
+    float SPEED_HORIZONTAL_NORMAL = 6.0f;
+    float SPEED_HORIZONTAL_MAX = 8.0f;
     int POWER_MAX;
     GameObject sprites = null;
     //属性
     float speed_up = 8.0f;
-    float maxSpeed_hor = 6.5f;
+    float maxSpeed_hor;
     float lastPos_Y_setPower = 0.0f;
     float lastPos_Y_setMonster = 0.0f;
     float lastPos_Y_setSkill = 0.0f;
@@ -127,6 +129,7 @@ public class Player : MonoBehaviour
         lastPos_Y_setMonster = lastPos_Y_setPower;
         lastPos_Y_setSkill = lastPos_Y_setPower;
         speed_up = SPEED_UP_NORMAL;
+        maxSpeed_hor = SPEED_HORIZONTAL_NORMAL;
         Power = 50;
         state = STATE.None;
         portected = false;
@@ -330,6 +333,7 @@ public class Player : MonoBehaviour
     public void SpeedMax()
     {
         speed_up = SPEED_UP_MAX;
+        maxSpeed_hor = SPEED_HORIZONTAL_MAX;
         eventSpeedMax();
     }
 
@@ -349,6 +353,7 @@ public class Player : MonoBehaviour
             state = STATE.None;
             isProtecting = false;
         }
+        maxSpeed_hor = SPEED_HORIZONTAL_NORMAL;
     }
 
     public void SetProtected(bool value=true)

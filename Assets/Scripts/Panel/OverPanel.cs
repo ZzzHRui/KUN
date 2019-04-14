@@ -22,6 +22,7 @@ public class OverPanel : PanelBase
     Save saveData;
     string fileNam = "/save.dt";
     BinaryFormatter bf = new BinaryFormatter();
+    bool hasLoadFromServ = false;
 
     RectTransform rect = null;
     Vector3 scale = Vector3.one;
@@ -42,6 +43,7 @@ public class OverPanel : PanelBase
         scale.y = 0.1f;
         rect.localScale = scale;
         state = STATE.Open;
+        hasLoadFromServ = false;
 
         restartBtn = skin.transform.Find("RestartBtn").GetComponent<Button>();
         restartBtn.onClick.AddListener(OnButtonClick_Restart);
@@ -64,6 +66,7 @@ public class OverPanel : PanelBase
 
         //加载存档
         LoadSaveFile();
+        StartCoroutine("GetUserInfo");
     }
 
     public override void Update()
@@ -80,9 +83,10 @@ public class OverPanel : PanelBase
                 }
                 else
                 {
+                    if(!hasLoadFromServ)
+                        return;
                     scale.y = 1.0f;
                     state = STATE.None;
-                    GetUserInfo();
                     ShowScoreAndTips();
                 }
                 break;
@@ -140,7 +144,7 @@ public class OverPanel : PanelBase
             }
             else if(sp[0] == "0")  //没刷新记录
             {
-                str += "\n本次排名不变：第" + sp[1] + "名";
+                str += "\n历史排名：第" + sp[1] + "名";
                 str += "\n超过了" + string.Format("{0:F1}", ((float)(count - number) * 100.0f / (float)count)) + "% 的玩家";
                 if(number <= 10)
                     tips.text = string.Format("恭喜您继续保持第{0}名的记录！", number);
@@ -224,7 +228,7 @@ public class OverPanel : PanelBase
         {
             IPAddress ip = IPAddress.Parse(Game.instance.HOST);
             Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 500);
+            sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 1000);
             byte[] result = new byte[1024];
             int bytes = 0;
             try
@@ -235,6 +239,7 @@ public class OverPanel : PanelBase
             }
             catch
             {
+                hasLoadFromServ = true;
                 PanelMgr.instance.OpenPanel<TipsPanel>("", "服务器异常");
             }
             if(bytes != 0)
@@ -244,6 +249,7 @@ public class OverPanel : PanelBase
             }
             sock.Close();
         }
+        hasLoadFromServ = true;
     }
 
     public void OnButtonClick_Url()

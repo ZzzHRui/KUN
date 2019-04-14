@@ -52,12 +52,17 @@ public class TitleController : MonoBehaviour
             PanelMgr.instance.OpenPanel<SetNamePanel>("");
         }
 
+        StartCoroutine("GetListFromServer");
+    }
+
+    void GetListFromServer()
+    {
         //将服务器排行榜数据弄下来
         byte[] result = new byte[1024];
         int bytes = 0;
         IPAddress ip = IPAddress.Parse(Game.instance.HOST);
         Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 3000);
+        sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 1000);
         try
         {
             sock.Connect(new IPEndPoint(ip, Game.instance.PORT));
@@ -94,5 +99,6 @@ public class TitleController : MonoBehaviour
                 f.Close();
             }
         }
+        return;
     }
 }

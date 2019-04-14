@@ -5,8 +5,8 @@ using UnityEngine;
 /*小体积的竖直加速*/
 public class Monster3 : MonsterBase
 {
-    float speed_add1 = 0.01f;
-    float speed_add2 = 15.0f;
+    float speed_add1 = 0.0f;
+    float speed_add2 = 20.0f;
     float beginTime = float.MaxValue;
     float speedUpTime = 1.0f;
     // Start is called before the first frame update
@@ -14,7 +14,7 @@ public class Monster3 : MonsterBase
     {
         attack = Game.instance.attack[3];
         beginTime = Time.time;
-        speed_down = -1.0f;
+        speed_down = -1.5f;
         base.Start();
     }
 
