@@ -51,21 +51,30 @@ public class TitleController : MonoBehaviour
             //文件不存在，则设置名字并新建一个
             PanelMgr.instance.OpenPanel<SetNamePanel>("");
         }
-
-        StartCoroutine("GetListFromServer");
+        GetListFromServer();
     }
 
-    void GetListFromServer()
+    public void GetListFromServer()
     {
         //将服务器排行榜数据弄下来
         byte[] result = new byte[1024];
         int bytes = 0;
         IPAddress ip = IPAddress.Parse(Game.instance.HOST);
-        Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 1000);
+        //更新自己的最高分数
         try
         {
             sock.Connect(new IPEndPoint(ip, Game.instance.PORT));
+            sock.Send(System.Text.Encoding.Default.GetBytes("USER " + saveData.username + " " + saveData.maxScore.ToString()));
+            bytes = sock.Receive(result);
+        }
+        catch
+        {
+            PanelMgr.instance.OpenPanel<TipsPanel>("", "服务器异常");
+        }
+        try
+        {
             sock.Send(System.Text.Encoding.Default.GetBytes("GETTOP"));
             bytes = sock.Receive(result);
         }

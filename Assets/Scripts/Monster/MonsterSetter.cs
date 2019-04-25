@@ -120,7 +120,7 @@ public class MonsterSetter : MonoBehaviour
         {
             monsterIdx = GetMonstIdx(Random.Range(0, monsterLevel[monsterLevel.Length - 1] + 1));
             GameObject nowObj = GameObject.Instantiate(pre_monsters[monsterIdx], 
-                new Vector3(setPos_X[index[0]], offset_setPosY + nowY, monsterZ),
+                new Vector3(setPos_X[index[i]], offset_setPosY + nowY, monsterZ),
                 Quaternion.identity);
         }
     }

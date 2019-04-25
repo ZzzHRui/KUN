@@ -227,7 +227,7 @@ public class OverPanel : PanelBase
         if(saveData.username != "" && saveData.username != null)
         {
             IPAddress ip = IPAddress.Parse(Game.instance.HOST);
-            Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 1000);
             byte[] result = new byte[1024];
             int bytes = 0;
@@ -246,6 +246,12 @@ public class OverPanel : PanelBase
             {
                 string str = System.Text.Encoding.Default.GetString (result);
                 sp = str.Split(" ".ToCharArray()[0]);  //得到0/1 , 排名， 总用户数
+            }
+            //更新一下最高分
+            if(saveData.maxScore != nowScore)
+            {
+                sock.Send(System.Text.Encoding.Default.GetBytes("USER " + saveData.username + " " + saveData.maxScore.ToString()));
+                bytes = sock.Receive(result);
             }
             sock.Close();
         }
