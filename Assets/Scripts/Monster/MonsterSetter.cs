@@ -110,6 +110,10 @@ public class MonsterSetter : MonoBehaviour
             case LEVEL.Level4:
                 num = 2;
                 break;
+
+            case LEVEL.Level5:
+                num = 2;
+                break;
         }
         
         index = new int[num];
@@ -122,6 +126,8 @@ public class MonsterSetter : MonoBehaviour
             GameObject nowObj = GameObject.Instantiate(pre_monsters[monsterIdx], 
                 new Vector3(setPos_X[index[i]], offset_setPosY + nowY, monsterZ),
                 Quaternion.identity);
+            if (monsterIdx == 2)  //保证不会生成两只Monster2
+                break;
         }
     }
 
@@ -208,7 +214,7 @@ public class MonsterSetter : MonoBehaviour
                 index = new int[w];
                 for(int i = 0; i < h; i++)
                 {
-                    beginX = Random.Range(0, setPointNum - 1);
+                    beginX = Random.Range(0, setPointNum);
                     for(int j = 0; j < w; j++)
                     {
                         index[j] =( beginX + j + 1) % setPointNum;
@@ -236,11 +242,13 @@ public class MonsterSetter : MonoBehaviour
 
     void SetOffset_SetMonster()
     {
-        float rate;  //每秒产生的怪物波次，每拍0.5
-        if(Game.instance.Level < LEVEL.Level3)
+        float rate;  //每秒产生的怪物波次，每秒一波为0.5
+        if (Game.instance.Level < LEVEL.Level3)
             rate = 0.5f;
-        else
+        else if (Game.instance.Level < LEVEL.Level5)
             rate = 0.75f;
+        else
+            rate = 1.0f;
         Game.instance.offset_setMonster = Game.instance.speed_up_player / rate;
     }
 

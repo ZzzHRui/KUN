@@ -297,10 +297,10 @@ public class Player : MonoBehaviour
             protectPopo.SetActive(false);
             return false;
         }
-        
-        Power -= attack;
+
         animator.SetTrigger("BeAttack");
         state = STATE.Hurt;
+        Power -= attack;
         stateTime_last = Time.time;
         eventBeAttack();
         //判断死亡

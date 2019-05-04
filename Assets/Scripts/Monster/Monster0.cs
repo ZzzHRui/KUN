@@ -28,6 +28,9 @@ public class Monster0 : MonsterBase
             case LEVEL.Level4:
                 speed_down = Random.Range(8, 13) * 0.5f + speed_down_min;
                 break;
+            case LEVEL.Level5:
+                speed_down = Random.Range(10, 13) * 0.5f + speed_down_min;
+                break;
         }
         SetDirectionAndSpeed(Game.instance.monsterSetter.GetSetPoint_X());
         base.Start();

@@ -14,6 +14,7 @@ public class ListPanel : PanelBase
     Vector3 scale = Vector3.one;
     STATE state;
     Text listText;
+    Text scoreText;
     Text myScore;
 
     Save saveData;
@@ -41,6 +42,8 @@ public class ListPanel : PanelBase
 
         listText = skin.transform.Find("ListText").GetComponent<Text>();
         listText.text = "";
+        scoreText = skin.transform.Find("ScoreText").GetComponent<Text>();
+        scoreText.text = "";
         myScore = skin.transform.Find("MyScore").GetComponent<Text>();
         myScore.text = "";
         //加载存档
@@ -137,15 +140,17 @@ public class ListPanel : PanelBase
             listText.text = "还没有记录哦!";
             return;
         }
-        StringBuilder str = new StringBuilder();
+        StringBuilder listStr = new StringBuilder();
+        StringBuilder scoreStr = new StringBuilder();
         for(int i = 0; i < saveData.data.Count; i++)
         {
-            str.AppendFormat("{0, -9}", "第" + (i + 1).ToString() + "名");
-            str.AppendFormat("{0, -9}", saveData.data[i].username);
-            str.AppendFormat("{0, 9}", saveData.data[i].score.ToString());
-            str.Append("\n");
+            listStr.AppendFormat("{0, -9}", "第" + (i + 1).ToString() + "名");
+            listStr.AppendFormat("{0, -9}", saveData.data[i].username);
+            scoreStr.AppendFormat("{0}\n", saveData.data[i].score.ToString());
+            listStr.Append("\n");
         }
-        listText.text = str.ToString();
+        listText.text = listStr.ToString();
+        scoreText.text = scoreStr.ToString();
 
         myScore.text = saveData.maxScore.ToString();
     }

@@ -15,6 +15,11 @@ public class Monster3 : MonsterBase
         attack = Game.instance.attack[3];
         beginTime = Time.time;
         speed_down = -1.5f;
+        if (Game.instance.Level >= LEVEL.Level5)
+        {
+            speedUpTime = 0.3f;
+            speed_add2 += 2.0f;
+        }
         base.Start();
     }
 

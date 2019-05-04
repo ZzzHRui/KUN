@@ -18,5 +18,9 @@ public class AvailableArea : MonoBehaviour
         {
             Destroy(other.gameObject);
         }
+        else if(other.gameObject.tag == "Skill")  //意味着没吃到本次的道具，降低下次生成道具的距离
+        {
+            Game.instance.offset_setSkill /= 2.0f;
+        }
 	}
 }

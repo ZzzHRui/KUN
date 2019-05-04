@@ -13,6 +13,8 @@ public class Skill_Secret : SkillBase
     int goodRate = 6;
     ParticleSystem goodLight = null;
     ParticleSystem badLight = null;
+    GameObject normalLight = null;
+    GameObject sprite = null;
 
     GameObject pre_power = null;
     new void Start()
@@ -24,6 +26,8 @@ public class Skill_Secret : SkillBase
         id = 3;
         goodLight = gameObject.transform.Find("Secreat_good").GetComponent<ParticleSystem>();
         badLight = gameObject.transform.Find("Secreat_bad").GetComponent<ParticleSystem>();
+        normalLight = gameObject.transform.Find("Light").gameObject;
+        sprite = gameObject.transform.Find("sprite").gameObject;
     }
 
     new void BeginSkill()
@@ -31,7 +35,10 @@ public class Skill_Secret : SkillBase
         //生成大量的能量
         int roll = Random.Range(0, 11);
         // InvokeRepeating("SetPower", 0.02f, 0.02f);  //test
-        if(roll <= goodRate)
+        if (sprite != null)
+            sprite.SetActive(false);
+        normalLight.SetActive(false);
+        if (roll <= goodRate)
         {
             InvokeRepeating("SetPower", 0.02f, 0.02f);  //0.1秒后才出现能量
             //特效
@@ -39,6 +46,7 @@ public class Skill_Secret : SkillBase
         }
         else
         {
+            Game.instance.playerScript.BeAttacked(0);
             Game.instance.playerScript.BeHurted(redussPower);
             //特效
             badLight.Play();
@@ -65,7 +73,9 @@ public class Skill_Secret : SkillBase
             Vector3 offset = new Vector3(offsetX, offsetY, 0.0f);
             GameObject power = GameObject.Instantiate(pre_power, gameObject.transform.position + offset, Quaternion.identity);
             power.GetComponent<Collider2D>().enabled = false;
-            power.GetComponent<Power>().SetToDying();
+            Power powerScript = power.GetComponent<Power>();
+            powerScript.SetIndex(2);
+            powerScript.SetToDying();
         }
         nowNum++;
     }

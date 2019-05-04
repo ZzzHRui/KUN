@@ -10,6 +10,7 @@ public class Power : MonoBehaviour
     float dyingTime = 0.25f;
     float redyTime = 0.1f;
     float beginTime = float.MaxValue;
+    int index = -1;
 
     enum MODE
     {
@@ -28,25 +29,19 @@ public class Power : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        int r = UnityEngine.Random.Range(0, 21);
-        if(r <= 14)
+        if(index < 0 || index > scale.Length)
         {
-            gameObject.transform.localScale = new Vector3(scale[0], scale[0], scale[0]);
-            power = Game.instance.power[0];
-            score = Game.instance.baseScore[0] * (int)Game.instance.Level * Game.instance.multiScore;
+            int r = UnityEngine.Random.Range(0, 21);
+            if (r <= 14)
+                index = 0;
+            else if (r <= 18)
+                index = 1;
+            else
+                index = 2;
         }
-        else if(r <= 18)
-        {
-            gameObject.transform.localScale = new Vector3(scale[1], scale[1], scale[1]);
-            power = Game.instance.power[1];
-            score = Game.instance.baseScore[1] * (int)Game.instance.Level * Game.instance.multiScore;
-        }
-        else
-        {
-            gameObject.transform.localScale = new Vector3(scale[2], scale[2], scale[2]);
-            power = Game.instance.power[2];
-            score = Game.instance.baseScore[2] * (int)Game.instance.Level * Game.instance.multiScore;
-        }
+        gameObject.transform.localScale = new Vector3(scale[index], scale[index], scale[index]);
+        power = Game.instance.power[index];
+        score = Game.instance.baseScore[index] * (int)Game.instance.Level * Game.instance.multiScore;
     }
 
     // Update is called once per frame
@@ -108,5 +103,10 @@ public class Power : MonoBehaviour
         gameObject.transform.SetParent(Game.instance.player.gameObject.transform);
         nowMode = MODE.Dying;
         beginTime = Time.time;
+    }
+
+    public void SetIndex(int i)
+    {
+        index = i;
     }
 }

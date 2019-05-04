@@ -105,8 +105,10 @@ public class PowerSetter : MonoBehaviour
                     Game.instance.offset_setPower = (float)UnityEngine.Random.Range(offset_setPower_minQuantum, offset_setPower_maxQuantum) 
                                             * offset_setPower_perQuantum + offset_setPower_min;
                     Game.instance.playerScript.SetPowerY_Last();
-                    if(Game.instance.Level >= LEVEL.Level3)
-                        Game.instance.offset_setPower /= 1.5f;
+                    if (Game.instance.Level >= LEVEL.Level5)
+                        Game.instance.offset_setPower *= 0.5f;
+                    else if (Game.instance.Level >= LEVEL.Level3)
+                        Game.instance.offset_setPower *= 0.667f;
                     nowMode = MODE.None;
                     setMap.Dispose();
                     offset_setPower_distance = OFFSET_DISTANCE_NORMAL;

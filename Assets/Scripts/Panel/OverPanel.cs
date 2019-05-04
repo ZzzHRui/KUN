@@ -139,7 +139,7 @@ public class OverPanel : PanelBase
             if(sp[0] == "1")  //刷新记录
             {
                 str += "\n排名刷新：第" + sp[1] + "名";
-                str += "\n超过了" + string.Format("{0:F1}", ((count - number) / count)) + "% 的玩家";
+                str += "\n超过了" + string.Format("{0:F1}", ((float)(count - number) * 100.0f / (float)count)) + "% 的玩家";
                 tips.text = "恭喜！刷新了记录！";
             }
             else if(sp[0] == "0")  //没刷新记录

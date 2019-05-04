@@ -89,14 +89,21 @@ public class SetNamePanel : PanelBase
             tipText.text = "包含非法字符，请换一个";
             return;
         }
+        else if(textName.text.Length > 10)
+        {
+            tipText.text = "名字太长啦!需小于10个字符";
+            return;
+        }
         else
         {
             tipText.text = "名字可用";
         }
+        string name = textName.text;
+        name.Replace("\n", "");
         //todo，测试是否重名
         //新建一个savedata并保存
         Save saveData = new Save();
-        saveData.username = textName.text;
+        saveData.username = name;
         saveData.maxScore = 0;
         FileStream f = null;
         try

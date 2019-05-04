@@ -52,7 +52,7 @@ public class GameController : MonoBehaviour
         Game.instance.offset_setSkill = 120.0f;
         MyAudio.instance.SetBGM("Main");
         MyAudio.instance.PlayBGM();
-        Invoke("OnLevelUp", 32.0f);
+        InvokeRepeating("OnLevelUp", 10.0f, 1.0f);
     }
 
     public void InitilizeAll()
@@ -74,21 +74,37 @@ public class GameController : MonoBehaviour
         switch(Game.instance.Level)
         {
             case LEVEL.Level1:
+                if (Game.instance.Score < 3000)
+                    return;
                 Game.instance.Level = LEVEL.Level2;
                 eventLevelUp();
-                Invoke("OnLevelUp", 90.0f);
+                //Invoke("OnLevelUp", 90.0f);
                 break;
 
             case LEVEL.Level2:
+                if (Game.instance.Score < 10000)
+                    return;
                 Game.instance.Level = LEVEL.Level3;
                 eventLevelUp();
-                Invoke("OnLevelUp", 120.0f);
+                //Invoke("OnLevelUp", 120.0f);
                 break;
 
             case LEVEL.Level3:
+                if (Game.instance.Score < 30000)
+                    return;
                 Game.instance.Level = LEVEL.Level4;
                 eventLevelUp();
                 break;
+
+            case LEVEL.Level4:
+                if (Game.instance.Score < 300000)
+                    return;
+                Game.instance.Level = LEVEL.Level5;
+                eventLevelUp();
+                break;
+
+            default:
+                return;
         }
     }
 }

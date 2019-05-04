@@ -6,7 +6,8 @@ public enum LEVEL {
         Level1 = 1,
         Level2,
         Level3,
-        Level4
+        Level4,
+        Level5
 }
 
 /*全局变量*/
@@ -59,6 +60,7 @@ public class Game
     public int[][] monsterLevel = {  //每组（每个难度）的每个元素为对应种类怪物出现的概率
         new int[]{4, 4, 5, 5},  //总长度为最后一个元素的值，i种类占用的长度为 int[i] - int[i - 1]，本行种类0:2 = 4:1
         new int[]{5, 8, 10, 10},
+        new int[]{5, 10, 13, 18},
         new int[]{5, 10, 13, 18},
         new int[]{5, 10, 13, 18}
     };
